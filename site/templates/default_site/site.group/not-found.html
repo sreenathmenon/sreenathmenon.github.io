@@ -1,0 +1,39 @@
+{embed="site/.wrapper"}
+
+{snippet:sidebar_flyout}
+
+{exp:channel:entries limit="1" disable="{snippet:global_disable_single}" dynamic="no" url_title="not-found"}
+	
+	{exp:stash:set_value name="seo_entry" value="{url_title}"}
+	{exp:stash:set_value name="body_class" value="page page-{url_title}"}
+
+	{exp:stash:set name="robots"}
+		{if page_robots:total_selections > 0}
+			<meta name="robots" value="{page_robots backspace="1"}{option},{/page_robots}">
+		{/if}
+	{/exp:stash:set}
+
+	{exp:stash:set name="body"}
+		<div class="primary">
+			<div class="breadcrumbs">
+				<ul>
+					<li><a href="{site_url}">Home</a></li>
+					<li>{title}</li>
+
+				</ul>
+			</div>
+			
+			<article class="post">
+				
+				<section>
+					
+					{page_body}
+
+				</section>
+			</article>
+			
+		</div>
+	{/exp:stash:set}
+{/exp:channel:entries}
+
+{exp:stash:set name="sidebar_right"}{/exp:stash:set}

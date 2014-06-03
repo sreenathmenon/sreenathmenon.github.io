@@ -1,0 +1,75 @@
+{embed="site/.wrapper"}
+
+
+{exp:channel:entries limit="1" disable="{snippet:global_disable_single}"}
+	
+	
+	{exp:stash:set name="robots"}
+		{if page_robots:total_selections > 0}
+			<meta name="robots" value="{page_robots backspace="1"}{option},{/page_robots}">
+		{/if}
+	{/exp:stash:set}
+
+	{exp:stash:set_value name="seo_entry" value="{url_title}"}
+	{exp:stash:set_value name="body_class" value="page page-{url_title}"}
+
+
+	{exp:stash:set name="body"}
+		<div class="primary">
+			{snippet:global_breadcrumbs}
+
+			<div class="contact-form">
+				<h1 class="page-heading">Contact Us</h1>
+				
+				
+				{exp:freeform:form
+    				form_name="contact"
+    				return="contact-us/submit"
+    				required="name|company|email|phone" 
+				}
+				<div class="general-form">
+					<p>Let us know your questions or make us an offer.</p>	
+					<div class="form-collection">
+						<p class="form-item"><label for="name">Name:*</label>
+						<input type="text" name="name"></p>
+
+						<p class="form-item"><label for="company">Company:*</label>
+						<input type="text" name="company"></p>
+
+						<p class="form-item"><label for="company">Email:*</label>
+						<input type="email" name="email"></p>
+
+						<p class="form-item"><label for="phone">Phone:*</label>
+						<input type="text" name="phone"></p>
+
+						<p class="form-item"><label for="message">Message:</label>
+						<textarea name="message" id="" cols="30" rows="10"></textarea></p>
+
+						<span>* Required Fields</span>
+
+						<p class="form-item"><input type="submit" class="post-message">
+						<a class="privacy modal-link" href="{path="modal/privacy-policy"}">We respect your privacy</a>
+						</p>
+					</div>
+				</div>
+				{/exp:freeform:form}
+				
+			</div>
+		</div>
+		<aside class="main">
+			<div class="aside-contact">
+				<h2 class="callout-heading">BMI Surplus, Inc.</h2>
+				<p>{lv_global_address}</p>
+
+				<p><strong>Direct:</strong> {lv_global_phone}
+					<br>
+					<strong>Fax:</strong> {lv_global_fax}</p>
+
+				<p><strong>Hours of operation:</strong><br>{lv_global_hours}</p>
+
+				<p><strong>Shipping cut off:</strong><br>3:00pm EST unless special request is <br>made by 5pm. Please call for special shipping requests.</p>
+			</div>
+		</aside>
+	{/exp:stash:set}
+	
+{/exp:channel:entries}

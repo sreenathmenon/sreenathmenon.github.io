@@ -1,0 +1,43 @@
+{exp:stash:set name="sidebar"}
+<aside class="main">
+	<div class="side-nav fly">
+		<header>
+			<h1 class="featured-headline">Browse Scientific Equipment</h1>
+		</header>
+		
+		{!-- flyout product nav --}
+		{exp:navee:custom
+			nav_title="products"
+			class="sf-menu"
+		}
+			{!-- something is weird with the has_kids conditional. it seems to return the opposite of the expected value --}
+   			<li class="{class} {if has_kids == true}nochildren{/if}"><a href="{link}">{text}</a>{kids}</li>
+		{/exp:navee:custom}
+	</div>
+
+	<ul class="image-banners">
+		{exp:low_variables:pair var="lv_sidebar_ads"}
+			{if lv_sidebar_ads:ad_link != ""}
+				<li><a href="{lv_sidebar_ads:ad_link}"><img src="{lv_sidebar_ads:ad_image}" width="278"></a></li>
+			{if:else}
+				<li><img src="{lv_sidebar_ads:ad_image}" width="278"></li>
+			{/if}
+		{/exp:low_variables:pair}
+	</ul>
+</aside>
+{/exp:stash:set}
+
+{exp:stash:set name="misc_body_end"}
+<script src="{site_url}js/superfish/hoverIntent.js"></script>
+<script src="{site_url}js/superfish/superfish.min.js"></script>
+
+<script>
+	$(document).ready(function(){
+		$('ul.sf-menu').superfish({
+			delay: 800,
+			speed: 'fast',           
+				speedOut: 'fast'
+		});
+	});
+</script>
+{/exp:stash:set}

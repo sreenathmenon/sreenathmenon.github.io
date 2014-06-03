@@ -1,0 +1,103 @@
+{embed="site/.wrapper"}
+
+{if logged_out}
+	{redirect="account/login"}
+{/if}
+
+{snippet:sidebar_flyout}
+
+
+	{exp:stash:set name="robots"}
+		<meta name="robots" value="NOINDEX,NOFOLLOW">
+	{/exp:stash:set}
+
+	{!--{exp:stash:set_value name="seo_entry" value="{entry_id}"}--}
+	{exp:stash:set_value name="body_class" value="account-index"}
+
+	{exp:stash:set name="body"}
+	<div class="primary">
+		<div class="secondary-feature">
+			<h1 class="page-heading">My Account</h1>
+			{exp:member:custom_profile_data}
+			<div class="account-info">
+				<div class="billing-details">
+					<h2>Billing Address</h2>
+					<p>{m_first_name} {m_last_name}</p>
+					{if m_billing_company != ""}<p>{m_billing_company}</p>{/if}
+					{if m_billing_address_1 != ""}
+					<p>
+						{m_billing_address_1}<br>
+						{if m_billing_address_2 != ""}{m_billing_address_2}<br>{/if}
+						{m_billing_city}, {m_billing_state} {m_billing_zip}<br>
+						{m_billing_country}
+					</p>
+					{/if}
+					
+					
+				</div>
+				<div class="shipping-details">
+					<h2>Shipping Address</h2>
+					<p>{m_first_name} {m_last_name}</p>
+					{if m_shipping_company != ""}<p>{m_shipping_company}</p>{/if}
+					{if m_shipping_address_1 != ""}
+					<p>
+						{m_shipping_address_1}<br>
+						{if m_shipping_address_2 != ""}{m_shipping_address_2}<br>{/if}
+						{m_shipping_city}, {m_shipping_state} {m_shipping_zip}<br>
+						{m_shipping_country}
+					</p>
+					{/if}
+					
+				</div>
+				<div class="phone-details">
+					{if m_phone != ""}<p>{m_phone}</p>{/if}
+				</div>
+				<div class="email-details">
+					<p>{email}</p>
+				</div>
+			</div>
+			{/exp:member:custom_profile_data}
+			<div class="edit-account">
+				<a href="{path="account/edit"}" class="btn">Edit Account</a>
+			</div>
+			<div class="order-details">
+				<table>
+					<tr>
+						<th>Order Date</th>
+						<th>Order Number</th>
+						<th>Status</th>
+						<th>Tracking Number(s)</th>
+					</tr>
+					
+
+					{exp:store:orders member_id='CURRENT_USER' order_by='order_date' sort='desc'}
+
+						{if no_orders}
+							<tr>
+								<td colspan="4">You haven't placed any orders yet!</td>
+							</tr>
+						{/if}
+
+						<tr>
+							<td>{order_date format="%n/%d/%Y"}</td>
+							<td>{order_id}</td>
+							<td>{order_status}</td>
+							<td>
+								{exp:bmi_custom:order_tracking_numbers order_id="{order_id}"}
+									{if tracking_number != ""}
+										{if tracking_url}
+											<span class="tracking_number"><a href="{tracking_url}" target="_blank">{tracking_number}</a></span>
+										{if:else}
+											<span class="tracking_number">{tracking_number}</span>
+										{/if}
+									{/if}
+								{/exp:bmi_custom:order_tracking_numbers}
+							</td>
+						</tr>
+					{/exp:store:orders}
+					
+				</table>
+			</div>
+		</div>
+	</div>
+	{/exp:stash:set}

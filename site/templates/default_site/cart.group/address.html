@@ -1,0 +1,204 @@
+{embed="site/.wrapper"}
+
+
+	{exp:stash:set name="robots"}
+		<meta name="robots" value="NOINDEX,NOFOLLOW">
+	{/exp:stash:set}
+
+
+	{exp:stash:set_value name="body_class" value="cart-address"}
+
+{exp:stash:set name="body"}
+	
+	<div class="checkout">
+		<header>
+			<h1 class="page-heading">Shopping Cart</h1>
+			<nav>
+				<ul>
+					<li class="active">Step 1: Address Information</li>
+					<li><a href="#" class="checkout_submit">Step 2: Shipping and Payment</a></li>
+					<li>Step 3: Confirmation</li>
+				</ul>
+			</nav>
+		</header>
+		<aside class="verified">
+			<img src="/img/verified.png" alt="">
+		</aside>
+		<section class="billing">
+			<div id="mask" style="display:none;">
+					<img src="/img/wait.gif"><br>
+					<span>Cart is updating. Please wait.</span>
+			</div>
+
+			{exp:store:checkout
+				next="cart/payment-shipping"
+				form_id="address_form"
+				
+				error_delimiters='<span class="error">|</span>'
+				require="name|address1|country|postcode|phone"
+			}
+			<div class="billing-section">
+				<h1 class="billing-heading page-heading">Billing Address</h1>
+
+				<!-- Following section has been modified by Sreenath for adding the 'requried' tag to the elements. This for valdiation purpose -->
+				<p class="email">
+					<input type="email" placeholder="Email:*" name="order_email" value="{order_email}"  data-validation="email" required>
+					<a href="{path="modal/privacy-policy"}" class="modal-link">Privacy</a>
+				</p>
+
+				<p class="names">
+					<input type="text" placeholder="First Name:*" name="billing_first_name" value="{billing_first_name}" required>
+					<input type="text" placeholder="Last Name:*" name="billing_last_name" value="{billing_last_name}" required>
+				</p>
+
+				<p>
+					<input type="text" placeholder="Billing Company:" name="billing_company" value="{billing_company}">
+				</p>
+				<p>
+					<input type="text" placeholder="Billing Address:*" name="billing_address1" value="{billing_address1}" required>
+				</p>
+
+				<p>
+					<input type="text" name="billing_address2" value="{billing_address2}">
+				</p>
+
+				<p>
+					<input type="text" placeholder="City:*" name="billing_city" value="{billing_city}" required>
+				</p>
+
+				<p class="state">
+					<select name="billing_state" id="billing_state">
+						<option value="">State/Province:*</option>
+						{billing_state_options}
+					</select>
+				</p>
+
+				<p class="zip">
+					<input type="text" placeholder="Zip Code:*" name="billing_postcode" value="{billing_postcode}" required>
+					<select name="billing_country" id="billing_country">
+						<option value="">Country:*</option>
+						{billing_country_options}
+					</select>
+				</p>
+
+				<p class="phone">
+					<input type="text" placeholder="Phone:*" name="billing_phone" value="{billing_phone}" required>
+					<span>*Required Fields</span>
+				</p>
+
+				<input type="hidden" name="shipping_same_as_billing" value="1">
+				<p class="diff-billing"><input type="checkbox" name="shipping_same_as_billing" class="shipping-billing" id="shipping-diff" value="0" {if !shipping_same_as_billing}checked="checked"{/if}> <label for="shipping_same_as_billing">Shipping Address is <span>DIFFERENT</span> from Billing Address</label></p>
+			</div>
+			
+			<div class="billing-section shipping-address-fields" id="shipping-address" {if shipping_same_as_billing == "0"}style="display:block;"{/if}>
+				<h1 class="billing-heading page-heading">Shipping Address</h1>
+
+				<p class="names"><input type="text" placeholder="First Name:*" name="shipping_first_name" value="{shipping_first_name}">
+				<input type="text" placeholder="Last Name:*" name="shipping_last_name" value="{shipping_last_name}"></p>
+
+				<p><input type="text" placeholder="Shipping Company:" name="shipping_company" value="{shipping_company}"></p>
+
+				<p><input type="text" placeholder="Shipping Address:*" name="shipping_address1" value="{shipping_address1}"></p>
+
+				<p><input type="text" name="shipping_address2" value="{shipping_address2}"></p>
+
+				<p><input type="text" placeholder="City:*" name="shipping_city" value="{shipping_city}"></p>
+
+				<p class="state"><select name="shipping_state" id="shipping_state">
+				<option value="">State/Province:*</option>
+					{shipping_state_options}
+				</select></p>
+
+				<p class="zip"><input type="text" placeholder="Zip Code:*" name="shipping_postcode" value="{shipping_postcode}">
+				
+				<select name="shipping_country" id="shipping_country">
+					<option value="">Country:*</option>
+					{shipping_country_options}
+				</select></p>
+
+				<p class="phone"><input type="text" placeholder="Phone:*" name="shipping_phone" value="{shipping_phone}">
+
+				<span>*Required Fields</span></p>
+			</div>
+			
+			<h1 class="billing-heading page-heading">Email Preferences</h1>
+			<p class="email-pref"><input type="radio" name="order_custom3" value="y" {if order_custom3 == "y"}checked="checked"{/if}> <label for="order_custom3">Yes, send me emails when you have specials or receive exciting new equipment!</label></p>
+			<p class="email-pref"><input type="radio" name="order_custom3" value="" {if order_custom3 != "y"}checked="checked"{/if}> <label for="order_custom3">No, only send me emails regarding my orders.</label></p>
+			
+			{!-- hidden real submit button, triggered by js --}
+			<input type="submit" name="next" id="submit-button" class="" value="Continue To Payment and Shipping" style="display:none;"/>
+
+			<input type="submit" name="update_cart" value="Update Address" style="display:none;" id="update-button"/>
+
+			{/exp:store:checkout}
+			
+		</section>
+		<aside class="cart-side">
+			<h1 class="billing-heading page-heading">Shopping Cart</h1>
+			{exp:store:cart}
+			
+				{items}
+				<section>
+					{exp:ce_img:single 
+						src="{lv_product_image_path}{exp:bmi_custom:item_primary_image product_id='{entry_id}'}" 
+						alt="{title}" 
+						width="64" 
+						height="64" 
+						crop="yes"
+						fallback_src="/img/product-blank.gif"
+						parse="inward"
+					}
+					<h1>{title}</h1>
+					<div class="price-info">
+						<p>Price: {price}</p>
+						<p><span>Quantity:</span> {item_qty}</p>
+						{!--<p><a href="#">Delete</a> • <a href="#">Update</a></p>--}
+					</div>
+				</section>
+				{/items}
+			
+			<footer>
+				<p>Subtotal: <span>{order_subtotal}</span></p>
+
+				{if order_discount_val > 0}<p>Discount <span>-{order_discount}</span></p>{/if}
+				<p class="total">Total: <span>{order_total}</span></p>
+			</footer>
+			{/exp:store:cart}
+
+			<a href="#" class="btn pay checkout_submit">Continue To Shipping and Payment</a>
+		</aside>
+	</div>
+	
+{/exp:stash:set}
+
+{exp:stash:append name="misc_body_end"}
+<script type="text/javascript">
+	$(function(){
+
+		$('#shipping-diff').click(function(){
+			$('#shipping-address').toggle();
+		});
+
+		$('.checkout_submit').click(function(e){
+			e.preventDefault();
+			$('#submit-button').click();
+		});
+
+		// update the cart on country selection
+		$('#billing_country').change(function(){
+			$('#mask').show();
+			$('#update-button').click();
+		});
+
+		// update the cart on country selection
+		$('#shipping_country').change(function(){
+			$('#mask').show();
+			$('#update-button').click();
+		});
+	});
+</script>
+
+<!-- Added by Sreenath to add validation to the billing and shipping address section -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.1.47/jquery.form-validator.min.js"></script>
+<script> $.validate(); </script>
+{/exp:stash:append}

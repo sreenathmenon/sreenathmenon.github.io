@@ -1,0 +1,43 @@
+{embed="site/.wrapper"}
+
+
+{exp:channel:entries limit="1" disable="{snippet:global_disable_single}"}
+	
+	
+	{exp:stash:set name="robots"}
+		{if page_robots:total_selections > 0}
+			<meta name="robots" value="NOINDEX,NOFOLLOW">
+		{/if}
+	{/exp:stash:set}
+
+	{exp:stash:set_value name="seo_entry" value="{url_title}"}
+	{exp:stash:set_value name="body_class" value="page page-{url_title}"}
+
+
+	{exp:stash:set name="body"}
+		<div class="primary">
+			{snippet:global_breadcrumbs}
+			
+			<article class="post">
+				
+				<section>
+					
+					{page_body}
+
+				</section>
+			</article>
+			
+		</div>
+	{/exp:stash:set}
+	
+{/exp:channel:entries}
+
+{exp:ifelse parse="inward"}
+	{if post:email != ""}
+		{exp:bmi_custom:mailing_list_subscribe
+				email="{post:email}"
+				first_name="{post:first_name}"
+				last_name="{post:last_name}"
+		}
+	{/if}
+{/exp:ifelse}

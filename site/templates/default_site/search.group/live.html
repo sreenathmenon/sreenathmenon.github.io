@@ -1,0 +1,42 @@
+
+
+{exp:low_search:results 
+	keywords="{segment_3}" 
+	limit="5"
+	collection="products"
+	loose_ends="both"
+	search_mode="any"
+	search:product_sell_online="=not 0"
+}
+  {if no_results}
+  	<p>No Results Found</p>
+  {/if}
+  {if count ==  1}<ul>{/if}
+   
+	<li>
+		<a href="{url_title_path="products"}">
+			<span class="image">
+				{exp:ce_img:single 
+					src="{lv_product_image_path}{product_image_primary_filename}" 
+					alt="{title}" 
+					width="50" 
+					height="50"
+				}
+			</span>
+			<span class="title">
+				{exp:low_replace find="{low_search_keywords}" replace="<strong>{low_search_keywords}</strong>"}
+					{title} ({product_categories limit="1"}{title}{/product_categories})
+				{/exp:low_replace}
+			</span>
+		</a>	
+	</li>
+	
+
+ 	{if count == total_results}
+ 	</ul>
+
+ 	<p><a href="{path="search/{segment_3}"}">View all Results &raquo;</a></p>
+
+ 	{/if}
+  	
+{/exp:low_search:results}

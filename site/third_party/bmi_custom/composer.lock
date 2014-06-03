@@ -1,0 +1,111 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "6f68edfe89e6af706b44ccc3db615560",
+    "packages": [
+        {
+            "name": "constantcontact/constantcontact",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/constantcontact/php-sdk.git",
+                "reference": "32b9c199c9f522bf930ebdf9ccd46627d84f3079"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/constantcontact/php-sdk/zipball/32b9c199c9f522bf930ebdf9ccd46627d84f3079",
+                "reference": "32b9c199c9f522bf930ebdf9ccd46627d84f3079",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Ctct": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Constant Contact Web Services",
+                    "email": "webservices@constantcontact.com",
+                    "homepage": "http://developer.constantcontact.com"
+                }
+            ],
+            "description": "Constant Contact PHP SDK for v2",
+            "homepage": "http://developer.constantcontact.com",
+            "keywords": [
+                "constant contact",
+                "constantcontact",
+                "ctct",
+                "email marketing"
+            ],
+            "time": "2013-05-06 12:36:18"
+        },
+        {
+            "name": "nb/oxymel",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nb/oxymel.git",
+                "reference": "cbe626ef55d5c4cc9b5e6e3904b395861ea76e3c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nb/oxymel/zipball/cbe626ef55d5c4cc9b5e6e3904b395861ea76e3c",
+                "reference": "cbe626ef55d5c4cc9b5e6e3904b395861ea76e3c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Oxymel": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nikolay Bachiyski",
+                    "email": "nb@nikolay.bg",
+                    "homepage": "http://extrapolate.me/"
+                }
+            ],
+            "description": "A sweet XML builder",
+            "homepage": "https://github.com/nb/oxymel",
+            "keywords": [
+                "xml"
+            ],
+            "time": "2013-02-24 15:01:54"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": [
+
+    ],
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}

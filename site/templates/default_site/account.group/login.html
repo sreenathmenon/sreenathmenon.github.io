@@ -1,0 +1,94 @@
+{embed="site/.wrapper"}
+
+{snippet:sidebar_flyout}
+
+
+	{exp:stash:set name="robots"}
+		<meta name="robots" value="NOINDEX,NOFOLLOW">
+	{/exp:stash:set}
+
+	{!--{exp:stash:set_value name="seo_entry" value="{entry_id}"}--}
+	{exp:stash:set_value name="body_class" value="account-login"}
+
+	{exp:stash:set name="body"}
+	<div class="primary">
+		<div class="secondary-feature">
+			<h1 class="page-heading">Login or Create an Account</h1>
+			<div class="create-account">
+				{exp:freemember:register 
+					return="account" 
+					error_handling="inline" 
+					error_delimiters='<span class="error">|</span>'
+				}
+
+				<h2 class="featured-headline">Create an Account</h2>
+				
+				<div class="general-form account-form">
+					<div class="form-collection">
+						<p class="form-item"><label for="first-name">First Name:*</label>
+						
+						<input type="text" id="first-name" name="m_first_name"></p>
+
+						<p class="form-item"><label for="last-name">Last Name:*</label>
+						<input type="text" id="last-name" name="m_last_name"></p>
+
+						<p class="form-item">
+							<label for="company">Email:*</label>
+							<input type="email" name="email" name="email">
+							{error:email}
+						</p>
+
+						<p class="form-item">
+							<label for="password">Password:*</label>
+							<input type="password" name="password">
+							{error:password}
+						</p>
+
+						<p class="form-item">
+							<label for="confirm-password">Confirm Password:*</label>
+							<input type="password" name="password_confirm">
+							{error:password_confirm}
+						</p>
+
+						<p class="form-item checkbox"><input type="checkbox" checked id="newsletter" value="y" name="m_subscribe"> <label for="newsletter">Yes, I'd like to receive BMI news, offers, newsletters</label></p>
+
+						<span>* Required Fields</span>
+
+						<p class="form-item"><input type="submit" class="general-submit" value=""></p>
+					</div>
+				</div>
+				{/exp:freemember:register}
+			</div>
+			<div class="login-account">
+				<h2 class="featured-headline">Login to Existing Account</h2>
+				{exp:freemember:login 
+					return="account" 
+					error_handling="inline" 
+					error_delimiters='<span class="error">|</span>'
+				}
+				<div class="general-form account-form">
+					<div class="form-collection">
+						<p class="form-item">
+							<label for="email">Email:</label>
+							<input type="email" name="email">
+							{error:email}
+
+						</p>
+
+						<p class="form-item">
+							<label for="password">Password:</label>
+							<input type="password" name="password">
+							{error:password}
+						</p>
+
+						<p class="form-item"><input type="submit" class="general-submit" value="">
+						<a class="privacy" href="{path="account/forgot"}">Forgot your password?</a>
+						</p>
+					</div>
+
+				</div>
+				{/exp:freemember:login}
+			</div>
+		</div>
+	</div>
+	{/exp:stash:set}

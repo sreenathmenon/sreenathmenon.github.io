@@ -1,0 +1,61 @@
+{embed="site/.wrapper"}
+
+{snippet:sidebar_flyout}
+
+{exp:channel:entries limit="1" disable="{snippet:global_disable_single}" dynamic="no" url_title="homepage" channel="product_categories"}
+	{exp:stash:set_value name="seo_entry" value="{url_title}"}
+	{exp:stash:set_value name="body_class" value="category category-{url_title}"}
+
+	{exp:stash:set name="body"}
+		<div class="primary">
+			{category_featured_product limit="1"}
+			<div class="featured-product">
+				<a href="{url_title_path='products'}">
+					{exp:ce_img:single 
+						src="{lv_product_image_path}{product_image_primary_filename}" 
+						alt="{title}" 
+						width="250" 
+						height="188"
+					}
+				</a>
+				<div class="featured-meta">
+					<h1 class="featured-headline"><a href="{url_title_path='products'}">{product_name}</a></h1>
+					<p>{exp:eehive_hacksaw words="35"}{product_description}{/exp:eehive_hacksaw}</p>
+					<a href="{url_title_path='products'}" class="btn">Learn more</a>
+				</div>
+			</div>
+			{/category_featured_product}
+			<div class="testimonials">
+				<header>
+					<h1>Testimonials</h1>
+				</header>
+				{exp:low_variables:parse 
+					var="lv_homepage_testimonials"
+					limit="1"
+					orderby="random"
+
+				}
+				<blockquote>"{lv_homepage_testimonials:text}"{if lv_homepage_testimonials:customer != ""} - {lv_homepage_testimonials:customer}{/if}</blockquote>
+				{/exp:low_variables:parse}
+			</div>
+			<div class="lead-products">
+				<header>
+					<h1 class="page-heading">{category_optimized_title}</h1>
+				</header>
+				
+					{category_subcategories}
+						{if count % 4 == 1}<div class="product-row">{/if}
+						<section><a href="{url_title_path='products/category'}">
+							{exp:ce_img:single src="{category_image}" alt="{title}" width="149" height="100" crop="yes|center,center|0,0|yes"}<span>{if category_optimized_title != ""}{category_optimized_title}{if:else}{title}{/if}</span>
+						</a></section>
+						{if count % 4 == 0}</div>{/if}
+					{/category_subcategories}
+				
+				
+			</div>
+			<div class="secondary-feature">
+				{category_description}
+			</div>
+		</div>
+	{/exp:stash:set}
+{/exp:channel:entries}	

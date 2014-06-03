@@ -1,0 +1,169 @@
+{!-- this template is for viewing a single product. if there isn't one in the url, then we 404 --}
+{if segment_2 == ""}
+	{redirect="404"}
+{/if}
+
+{embed="site/.wrapper"}
+
+{snippet:sidebar_flyout}
+{snippet:global_addthis}
+
+{exp:channel:entries 
+	limit="1" 
+	disable="{snippet:global_disable_single}" 
+	dynamic="no" 
+	url_title="{segment_2}" 
+	channel="products"
+	search:product_sell_online="=not 0"
+}
+	{!-- if the product doesn't exist, 404 --}
+	{if no_results}
+		{redirect="404"}
+	{/if}
+
+	{!-- if out of stock, redirect to the category page --}
+	{if "{product_details:total_stock}" == "0"}
+		{product_categories limit="1"}
+			{redirect="products/category/{url_title}"}
+		{/product_categories}
+	{/if}
+
+	{exp:stash:set_value name="seo_entry" value="{url_title}"}
+	{exp:stash:set_value name="body_class" value="product product-{url_title}"}
+
+	{exp:stash:set name="body"}
+		<div class="primary">
+			<div class="breadcrumbs">
+				<ul>
+					<li><a href="{site_url}">Home</a></li>
+
+					{!-- category crumbs --}
+					{exp:playa:children field="product_categories" limit="1" var_prefix="cat"}
+						
+						{exp:navee:custom_crumbs 
+							wrap_type="none"
+							entry_id="{cat:entry_id}"
+						}
+							<li><a href="{link}">{text}</a></li>
+						{/exp:navee:custom_crumbs}
+					{/exp:playa:children}
+
+					{!-- current product --}
+					<li>{product_name}</li>
+					
+				</ul>
+			</div>
+			
+			<div class="featured-product product-view">
+			<h1 class="page-heading">{product_name}</h1>
+			<div class="images">
+				<div class="main-image">
+					{exp:ce_img:single 
+						src="{lv_product_image_path}{product_image_primary_filename}" 
+						alt="{title}" 
+						width="250" 
+						height="188"
+					}
+				</div>
+				{if product_image_primary_filename != ""}<span class="view-larger"><a class="zoom" href="{lv_product_image_path}{product_image_primary_filename}">View Larger Image</a></span>{/if}
+				<ul class="thumbnails">
+					{product_additional_images}
+					<li>
+						<a href="{product_additional_images:image}" class="zoom">
+							{exp:ce_img:single src="{product_additional_images:image}" alt="{title}" width="45" height="45"}
+						</a>
+					</li>
+					{/product_additional_images}
+					
+				</ul>
+			</div>
+			<div class="featured-meta product-meta">
+				<ul>
+					<li><strong>Manufacturer:</strong> {product_manufacturer}</li>
+					<li><strong>Model #:</strong> {product_number}</li>
+					<li class="sku"><strong>SKU:</strong> {product_details:sku}</li>
+					{if production_condition}<li class="condition"><strong>Item Condition:</strong> {product_condition}</li>{/if}
+					<li><strong># In-Stock:</strong> {product_details:total_stock}</li>
+					<li class="price"><strong>Price:</strong> {if "{product_details:price_val}" == '0'}Call for Pricing{if:else}{product_details:price}{/if}</li>
+					
+					{if product_location}<li class="location">Location: {product_location}</li>{/if}
+					{if product_condition}<li class="location">Condition: {product_condition}</li>{/if}
+					{if product_cosmetic_condition}<li class="location">Cosmetic Condition: {product_cosmetic_condition}</li>{/if}
+					{if product_tested}<li class="location">Tested: {product_tested}</li>{/if}
+				</ul>
+			</div>
+			<div class="action-bar">
+				<div class="ask-question">
+					<a href="{url_title_path="products/ask"}">Ask a Question <span>Make Us An Offer</span></a>
+				</div>
+				{exp:store:product 
+					entry_id="{entry_id}"
+					return="cart"
+					form_id="add_to_cart"
+				}
+				
+				{if total_stock > 0 && "{product_details:price_val}" != '0'}
+					<div class="quantity">
+						<label for="quantity">Quantity</label>
+						<select name="item_qty" id="items">
+							
+							{exp:for_loop start="1" end="{total_stock}" increment="1"}  
+							     <option value="{index}">{index}</option>
+							{/exp:for_loop}
+
+						</select>
+					</div>
+					
+					<div class="add-to-cart">
+						<a href="#" onclick="document.getElementById('add_to_cart').submit(); return false;">Add to Cart</a>
+					</div>
+					
+				{/if}
+				{/exp:store:product}
+
+				<div class="check-out">
+					<a href="{path="cart"}">Check Out</a>
+				</div>
+				<div class="share-page">
+					<a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=300">Share this Page</a>
+				</div>
+			</div>
+		</div>
+		<div class="secondary-feature">
+			<h1 class="featured-headline product-description">{product_categories limit="1"}{title}{/product_categories}</h1>
+			
+			{product_description}
+
+			<p class="shipping"><a href="{path="products/modal-shipping-policies"}" class="modal-link">Shipping Policies</a></p>
+		</div>
+		<div class="lead-products product-list">
+			<h1 class="featured-headline related-products">Related Products</h1>
+			<div class="product-row">
+
+				{exp:playa:coparents 
+					limit="4" 
+					var_prefix="related" 
+					channel="products"
+					
+				}
+					<section>
+						<a href="{related:url_title_path="products"}">
+							{exp:ce_img:single 
+								src="{lv_product_image_path}{related:product_image_primary_filename}" 
+								alt="{related:title}" 
+								width="149" 
+								height="100" 
+								crop="yes"
+								fallback_src="/img/product-blank.gif"
+							}
+							<span>{related:title}</span>
+							<span class="price">{if "{related:product_details:price_val}" == '0'}Call to Order{if:else}{related:product_details:price}{/if}</span>
+						</a>
+					</section>
+				{/exp:playa:coparents}
+				
+			</div>
+		</div>
+
+	{/exp:stash:set}
+{/exp:channel:entries}

@@ -1,0 +1,2 @@
+a:3:{s:4:"time";i:1398969488;s:3:"ttl";i:3600;s:4:"data";s:308:"<?xml version="1.0" encoding="UTF-8"?>
+<RateReply xmlns="http://fedex.com/ws/rate/v10" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><HighestSeverity>SUCCESS</HighestSeverity><Version><ServiceId>crs</ServiceId><Major>10</Major><Intermediate>0</Intermediate><Minor>0</Minor></Version></RateReply>";}

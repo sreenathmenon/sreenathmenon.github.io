@@ -1,0 +1,39 @@
+{category_featured_product limit="1"}
+<div class="featured-product">
+	<!-- {lv_product_image_path}{product_image_primary_filename} -->
+	<a href="{url_title_path='products'}">
+		{exp:ce_img:single 
+			src="/uploads/product_images/{product_image_primary_filename}" 
+			alt="{title}" 
+			width="250" 
+			height="188"
+		}
+	</a>
+	<div class="featured-meta">
+		<h1 class="featured-headline"><a href="{url_title_path='products'}">{product_name}</a></h1>
+		<p>{exp:eehive_hacksaw words="35"}{product_description}{/exp:eehive_hacksaw}</p>
+		<a href="{url_title_path='products'}" class="btn">Learn more</a>
+	</div>
+</div>
+{/category_featured_product}
+<div class="lead-products">
+	<header>
+		<h1 class="page-heading">{if category_optimized_title != ""}{category_optimized_title}{if:else}{title}{/if}</h1>
+	</header>
+
+	{!-- subcategories --}
+	
+	{category_subcategories}
+		{if count % 4 == 1}<div class="product-row">{/if}
+		<section><a href="{url_title_path='products/category'}">
+			{exp:ce_img:single src="{category_image}" alt="{title}" width="149" height="100" crop="yes|center,center|0,0|yes"}<span>{if category_optimized_title != ""}{category_optimized_title}{if:else}{title}{/if}</span>
+		</a></section>
+		{if count % 4 == 0}</div>{/if}
+	{/category_subcategories}
+
+
+</div>
+<div class="secondary-feature">
+	{category_description}
+	
+</div>

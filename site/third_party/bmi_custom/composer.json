@@ -1,0 +1,11 @@
+{
+    "autoload": {
+        "psr-0": {
+            "Ctct": "src"
+        }
+    },
+    "require": {
+        "constantcontact/constantcontact" : "1.1.*",
+        "nb/oxymel" : "0.1.0"
+    }
+}

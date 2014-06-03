@@ -1,0 +1,57 @@
+{embed="site/.wrapper"}
+
+
+{if page_offset == "0" && segment_2 != ""}
+	{redirect="404"}
+{/if}
+
+{snippet:blog_category_sidebar}
+{snippet:global_social_scripts}
+{snippet:blog_disqus_count}
+
+	{exp:stash:set name="robots"}
+		{if paginated}
+			<meta name="robots" value="NOINDEX,FOLLOW">
+		
+		{if:else}
+			<meta name="robots" value="INDEX,FOLLOW">
+		{/if}	
+	{/exp:stash:set}
+
+	{exp:stash:set_value name="seo_entry" value="blog"}
+	{exp:stash:set_value name="body_class" value="blog blog-index"}
+
+	{exp:stash:set name="body"}
+	<div class="primary">
+		<div class="breadcrumbs">
+			<ul>
+				<li><a href="{site_url}">Home</a></li>
+				<li>Blog</li>
+			</ul>
+		</div>
+
+		<div class="lead-blurb blog-heading">
+			<h1 class="page-heading">BMI Surplus Blog</h1>
+		</div>
+
+		{exp:channel:entries 
+			limit="6" 
+			disable="category_fields|member_data"
+			channel="blog"
+			paginate="bottom"
+			dynamic="no"
+		}
+			{snippet:blog_post_list}
+		{/exp:channel:entries}
+		
+		<footer class="list-footer">
+			<div class="pagination">
+				<ul>
+					{exp:stash:parse process="end"}
+						{exp:stash:pagination_links}
+					{/exp:stash:parse}
+				</ul>
+			</div>
+		</footer>
+	</div>
+	{/exp:stash:set}

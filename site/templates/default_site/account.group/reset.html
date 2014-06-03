@@ -1,0 +1,53 @@
+{embed="site/.wrapper"}
+
+{snippet:sidebar_flyout}
+
+
+	{exp:stash:set name="robots"}
+		<meta name="robots" value="NOINDEX,NOFOLLOW">
+	{/exp:stash:set}
+
+	{!--{exp:stash:set_value name="seo_entry" value="{entry_id}"}--}
+	{exp:stash:set_value name="body_class" value="account-reset"}
+
+	{exp:stash:set name="body"}
+	<div class="primary">
+		<div class="secondary-feature">
+			<h1 class="page-heading">Reset Password</h1>
+			<div class="create-account">
+				{exp:freemember:reset_password 
+					return="account/reset-complete" 
+					error_handling="inline" 
+					error_delimiters='<span class="error">|</span>'
+				}
+				 {if no_results}
+        			<p>Sorry, the link you clicked does not appear to be valid, or has expired.</p>
+    			{/if}
+    			
+				<p>Enter your new password.</p>
+				<div class="general-form account-form">
+					<div class="form-collection">
+
+						<p class="form-item">
+							<label for="password">Password:*</label>
+							<input type="password" name="password">
+							{error:password}
+						</p>
+
+						<p class="form-item">
+							<label for="confirm-password">Confirm Password:*</label>
+							<input type="password" name="password_confirm">
+							{error:password_confirm}
+						</p>
+
+
+						<p class="form-item"><input type="submit" class="general-submit" value=""></p>
+					</div>
+				</div>
+				{/exp:freemember:reset_password}
+			</div>
+			
+			
+		</div>
+	</div>
+	{/exp:stash:set}

@@ -1,0 +1,27 @@
+{exp:stash:set name="sidebar"}
+<aside class="main">
+	<div class="side-nav expand">
+		<header>
+			<h1 class="featured-headline">Browse Scientific Equipment</h1>
+		</header>
+
+		{exp:navee:custom
+			nav_title="products" 
+			wrap_type="ul"
+			selected_class="active"
+			selected_class_on_parents="true"
+		}
+			<li class="{class}"><a href="{link}">{text}</a>{kids}</li>
+		{/exp:navee:custom}
+	</div>
+	<ul class="image-banners">
+		{exp:low_variables:pair var="lv_sidebar_ads"}
+			{if lv_sidebar_ads:ad_link != ""}
+				<li><a href="{lv_sidebar_ads:ad_link}"><img src="{lv_sidebar_ads:ad_image}" width="278"></a></li>
+			{if:else}
+				<li><img src="{lv_sidebar_ads:ad_image}" width="278"></li>
+			{/if}
+		{/exp:low_variables:pair}
+	</ul>
+</aside>
+{/exp:stash:set}

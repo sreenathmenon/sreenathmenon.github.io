@@ -1,0 +1,92 @@
+{!-- this template is for viewing a single product. if there isn't one in the url, then we 404 --}
+{if segment_3 == ""}
+	{redirect="404"}
+{/if}
+
+{embed="site/.wrapper"}
+
+{snippet:sidebar_flyout}
+{snippet:global_addthis}
+
+{exp:channel:entries limit="1" disable="{snippet:global_disable_single}" dynamic="no" url_title="{segment_3}" channel="products"}
+
+	{exp:stash:set_value name="seo_entry" value="{url_title}"}
+	{exp:stash:set_value name="body_class" value="product-ask product-ask-{url_title}"}
+
+	{exp:stash:set name="body"}
+		<div class="primary">
+			<div class="breadcrumbs">
+				<ul>
+					<li><a href="{site_url}">Home</a></li>
+
+					{!-- category crumbs --}
+					{exp:playa:children field="product_categories" limit="1" var_prefix="cat"}
+						
+						{exp:navee:custom_crumbs 
+							wrap_type="none"
+							entry_id="{cat:entry_id}"
+						}
+							<li><a href="{link}">{text}</a></li>
+						{/exp:navee:custom_crumbs}
+					{/exp:playa:children}
+
+					{!-- current product --}
+					<li>{title}</li>
+					
+				</ul>
+			</div>
+
+			<div class="featured-product product-view">
+			<h1 class="page-heading">{product_name}</h1>
+			<div class="images">
+				<div class="main-image">
+					{exp:ce_img:single 
+						src="{lv_product_image_path}{product_image_primary_filename}" 
+						alt="{title}" 
+						width="250" 
+						height="188"
+					}
+				</div>
+			</div>
+			<div class="question-form">
+				<h2 class="featured-headline">Product Questions or Offer?</h2>
+				<p>Let us know your questions or make us an offer.</p>
+				<a href="{url_title_path="products"}" class="go-back">Back to Product</a>
+				{exp:freeform:form
+    				form_name="ask_a_question"
+    				return="products/confirm/{url_title}"
+    				required="name|company|phone" 
+				}
+
+				<div class="form-collection">
+					<p class="form-item"><label for="name">Name:*</label>
+					<input type="text" name="name"></p>
+
+					<p class="form-item"><label for="company">Company:*</label>
+					<input type="text" name="company"></p>
+
+					<p class="form-item"><label for="company">Email:</label>
+					<input type="text" name="email"></p>
+
+					<p class="form-item"><label for="phone">Phone:*</label>
+					<input type="text" name="phone"></p>
+
+					<p class="form-item"><label for="message">Message:</label>
+					<textarea name="message" id="" cols="30" rows="10"></textarea></p>
+					<span>* Required Fields</span>
+
+					<input type="hidden" name="product" value="{title}">
+
+					<p class="form-item"><input type="submit" class="post-message">
+					<a class="privacy modal-link" href="{path="modal/privacy-policy"}">We respect your privacy</a>
+					</p>
+
+					
+				</div>
+				{/exp:freeform:form}
+			</div>
+		</div>
+			
+			
+	{/exp:stash:set}
+{/exp:channel:entries}

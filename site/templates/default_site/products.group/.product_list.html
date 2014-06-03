@@ -1,0 +1,62 @@
+{exp:stash:parse process="end"}
+	{exp:store:search
+		channel="products"
+		dynamic="no"
+		search:in_stock="yes"
+		orderby="{stash:search_order}"
+		sort="{stash:search_sort}"
+		parse="inward"
+		limit="{stash:search_limit}"
+		search:product_categories="{stash:search_category}"
+		paginate="bottom"
+		search:product_sell_online="=not 0"
+		{if get:manufacturer != ""}search:product_manufacturer="{stash:search_manufacturer}"{/if}
+	}
+		{if "{switch="one|two|three|four"}" == "one"}
+		<div class="product-row">
+		{/if}	
+		<section>
+			<a href="{url_title_path="products"}">
+				{exp:ce_img:single 
+					src="{lv_product_image_path}{product_image_primary_filename}" 
+					alt="{title}" 
+					width="149" 
+					height="100" 
+					crop="yes|center,center|0,0|yes"
+					fallback_src="/img/product-blank.gif"
+				}
+
+				
+				<span>{product_name}</span>
+				<span class="price">{if "{product_details:price_val}" == '0'}Call to Order{if:else}{product_details:price}{/if}</span>
+			</a>
+		</section>
+		{if "{switch="one|two|three|four"}" == "four"}
+		</div>
+		{/if}
+
+		{exp:stash:set name="absolute_results"}{absolute_results}{/exp:stash:set}
+ 
+		{paginate}
+			{exp:stash:set name="pagination_links"}
+
+				 {pagination_links}
+				      <ul>
+				              {previous_page}
+				                      <li class="prev"><a href="{pagination_url}{if query_string !=""}?{query_string}{/if}">Previous</a></li>
+				              {/previous_page}
+
+				              {page}
+				                      <li class="page-{pagination_page_number} {if current_page}active{/if}"><a href="{pagination_url}{if query_string !=""}?{query_string}{/if}">{pagination_page_number}</a></li>
+				              {/page}
+
+				              {next_page}
+				                      <li class="next"><a href="{pagination_url}{if query_string !=""}?{query_string}{/if}">Next</a></li>
+				              {/next_page}
+				      </ul>
+				{/pagination_links}
+
+			{/exp:stash:set}
+		{/paginate}
+	{/exp:store:search}
+{/exp:stash:parse}

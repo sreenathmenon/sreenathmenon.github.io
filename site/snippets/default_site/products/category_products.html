@@ -1,0 +1,55 @@
+<div class="lead-blurb">
+	<h1 class="page-heading">{category_optimized_title}</h1>
+	{category_description}
+</div>
+<div class="lead-products product-list">
+	<header>
+		<div class="items-per-page">
+			<p>Items per page</p>
+			<select name="items" id="items">
+				
+				<option value="" {if get:limit == "24" || get:limit == "0"}selected{/if}>24</option>
+				<option value="60" {if get:limit == "60"}selected{/if}>60</option>
+				<option value="100" {if get:limit == "100"}selected{/if}>100</option> 
+			</select>
+		</div>
+		<div class="filters">
+			<div class="pagination">
+
+				{exp:stash:parse process="end"}
+						{exp:stash:pagination_links}
+				{/exp:stash:parse}
+
+			</div>
+
+			<div class="manufacturer-sort">
+				<select name="manufacturer" id="manufacturer">
+					<option value="">Sort by Manufacturer</option>
+					{exp:bmi_custom:manufacturers_list cat_id="{entry_id}"}
+						<option value="{manufacturer}" {if "{get:manufacturer}" == "{manufacturer}"}selected{/if}>{manufacturer}</option>
+					{/exp:bmi_custom:manufacturers_list}
+				</select>
+			</div>
+		</div>
+	</header>
+	<nav class="sort">
+		<p><strong>Sort By:</strong></p>
+		<ul>
+			<li {if get:sort == "0"}class="active"{/if}><a href="#" class="sort_link" id="0">Recently Added</a></li>
+			<li {if get:sort == "name"}class="active"{/if}><a href="#" class="sort_link" id="name">Product Name</a></li>
+			<li {if get:sort == "pricea"}class="active"{/if}><a href="#" class="sort_link" id="pricea">Price Low to High</a></li>
+			<li {if get:sort == "priced"}class="active"{/if}><a href="#" class="sort_link" id="priced">Price High to Low</a></li>
+		</ul>
+	</nav>
+
+	{!-- product list starts here --}
+	{embed="products/.product_list"}
+
+	<footer>
+		<div class="pagination">
+			{exp:stash:parse process="end"}
+				{exp:stash:pagination_links}
+			{/exp:stash:parse}
+		</div>
+	</footer>
+</div>

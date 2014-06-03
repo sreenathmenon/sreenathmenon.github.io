@@ -1,0 +1,96 @@
+{!-- this template is for viewing a single category. if there isn't one in the url, then we 404 --}
+{if segment_3 == "" || segment_3 == "homepage"}
+	{redirect="404"}
+{/if}
+
+{embed="site/.wrapper"}
+
+	{exp:stash:set name="robots"}
+		{if query_string != ""}
+			<meta name="robots" value="NOINDEX,NOFOLLOW">
+		{if:elseif paginated}
+			<meta name="robots" value="NOINDEX,FOLLOW">
+		{if:else}
+			<meta name="robots" value="INDEX,FOLLOW">
+		{/if}
+	{/exp:stash:set}
+
+{snippet:sidebar_vertical}
+
+{exp:channel:entries limit="1" disable="{snippet:global_disable_single}" dynamic="no" url_title="{segment_3}" channel="product_categories"}
+	{exp:stash:set_value name="seo_entry" value="{url_title}"}
+	{exp:stash:set_value name="body_class" value="category category-{url_title}"}
+
+	{exp:stash:set_value name="search_category" value="[{entry_id}]"}
+
+	{exp:ifelse parse="inward"}
+		
+		{if get:sort == "name"}
+			{exp:stash:set name="search_sort"}asc{/exp:stash:set}
+			{exp:stash:set name="search_order"}title{/exp:stash:set}
+		{if:elseif get:sort == "pricea"}
+			{exp:stash:set name="search_sort"}asc{/exp:stash:set}
+			{exp:stash:set name="search_order"}price{/exp:stash:set}
+		{if:elseif get:sort == "priced"}
+			{exp:stash:set name="search_sort"}desc{/exp:stash:set}
+			{exp:stash:set name="search_order"}price{/exp:stash:set}
+		{if:else}
+			{exp:stash:set name="search_sort"}desc{/exp:stash:set}
+			{exp:stash:set name="search_order"}entry_date{/exp:stash:set}
+		{/if}
+
+		{if get:limit != "0"}
+			{exp:stash:set name="search_limit"}{get:limit}{/exp:stash:set}
+		{if:else}
+			{exp:stash:set name="search_limit"}24{/exp:stash:set}
+		{/if}
+
+		{if get:manufacturer != ""}
+			{exp:stash:set name="search_manufacturer"}{get:manufacturer}{/exp:stash:set}
+		{/if}	
+
+	{/exp:ifelse}
+
+	{exp:stash:set name="body"}
+		<div class="primary">
+			<div class="breadcrumbs">
+				<ul>
+					<li><a href="{site_url}">Home</a></li>
+					
+					{exp:navee:custom_crumbs 
+						wrap_type="none"
+						entry_id="{entry_id}"
+						nav_title="products"
+					}
+						{if is_last_item}
+							<li>{text}</li>
+						{if:else}
+							<li><a href="{link}">{text}</a></li>
+						{/if}	
+					{/exp:navee:custom_crumbs}
+
+				</ul>
+			</div>
+
+
+			{exp:ifelse parse="inward"}
+				{if category_type == "categories"}
+					{snippet:products_category_categories}
+				{if:else}
+					{snippet:products_category_products}
+				{/if}
+			{/exp:ifelse}
+
+		</div>
+	{/exp:stash:set}
+
+	{exp:ifelse parse="inward"}
+		{if category_type == "products"}
+			{snippet:products_category_products_scripts}
+		{/if}
+	{/exp:ifelse}
+{/exp:channel:entries}
+
+
+
+			

@@ -1,0 +1,420 @@
+{embed="site/.wrapper"}
+
+{exp:stash:set name="robots"}
+	<meta name="robots" value="NOINDEX,NOFOLLOW">
+{/exp:stash:set}
+
+{exp:stash:set_value name="body_class" value="cart-payment-shipping"}
+
+{exp:stash:set name="sidebar-cart"}
+	{exp:store:cart}
+
+		{items}
+		<section>
+			{exp:ce_img:single 
+				src="{lv_product_image_path}{exp:bmi_custom:item_primary_image product_id='{entry_id}'}" 
+				alt="{title}" 
+				width="64" 
+				height="64" 
+				crop="yes"
+				fallback_src="/img/product-blank.gif"
+				parse="inward"
+			}
+			<h1>{title}</h1>
+			<div class="price-info">
+				<p>Price: {price}</p>
+				<p><span>Quantity:</span> {item_qty}</p>
+				{!--<p><a href="#">Delete</a> • <a href="#">Update</a></p>--}
+			</div>
+		</section>
+		{/items}
+
+		<footer>
+			<p>Subtotal: <span>{order_subtotal}</span></p>
+			
+			{if order_discount_val > 0}<p>Discount <span>-{order_discount}</span></p>{/if}
+			<p>Shipping: <span>{order_shipping}</span></p>
+			<p>Tax: <span>{order_tax}</span></p>
+			<p class="total">Total: <span>{order_total}</span></p>
+		</footer>
+	{/exp:store:cart}	
+{/exp:stash:set}
+
+{exp:stash:set name="body"}
+	<div class="checkout">
+		
+		<header>
+			<h1 class="page-heading">Check Out</h1>
+			<nav>
+				<ul>
+					<li><a href="{path="cart/address"}">Step 1: Address Information</a></li>
+					<li class="active">Step 2: Shipping and Payment</li>
+					<li>Step 3: Confirmation</li>
+				</ul>
+			</nav>
+		</header>
+		<aside class="verified">
+			<img src="/img/verified.png" alt="Verified & Secured">
+			
+		</aside>
+		
+		<section class="billing">
+			<div id="mask" style="display:none;">
+					<img src="/img/wait.gif"><br>
+					<span>Cart is updating. Please wait.</span>
+			</div>
+			<div class="billing-section">
+				<h1 class="billing-heading page-heading">Shipping and Payment</h1>
+				
+				{exp:store:cart}
+				<div class="address">
+					<p><strong>Billing Address:</strong><br>
+					{billing_first_name} {billing_last_name}<br>
+					{if billing_company}{billing_company}<br>{/if}
+					{billing_address1}<br>
+					{if billing_address2}{billing_address2}<br>{/if}
+					{billing_city}, {billing_state} {billing_postcode}<br>
+					{billing_country}
+					</p>
+				</div>
+				<div class="address">
+					<p><strong>Shipping Address:</strong><br>
+					{shipping_first_name} {shipping_last_name}<br>
+					{if shipping_company}{shipping_company}<br>{/if}
+					{shipping_address1}<br>
+					{if shipping_address2}{shipping_address2}<br>{/if}
+					{shipping_city}, {shipping_state} {shipping_postcode}<br>
+					{shipping_country}
+					</p>
+				</div>
+				{/exp:store:cart}
+			
+			</div>
+
+			{exp:store:checkout
+				next=""
+				error_handling="inline"
+				error_delimiters='<span class="error">|</span>'
+				require="shipping_method"
+				disable_javascript="yes"
+				secure="{global:secure}"
+
+			}
+
+			<div class="billing-section shipping-methods">
+				<h1 class="billing-heading page-heading">Select Your Shipping Method</h1>
+				{exp:bmi_custom:cart_no_shipping}
+				{if missing_dimensions != 'y' && cart_weight <= 50 && container_self != 'y'}
+
+					{error:shipping_method}
+
+					{shipping_methods}
+					<p><input type="radio" name="shipping_method" value="{method_id}" {if method_selected}checked="checked"{/if}> <label for="option">{method_title} - <span>{method_price}</span></label></p>
+					{/shipping_methods}
+
+					
+					<p class="own-shipping" {if shipping_method_id != "2"}style="display:none;{/if}">
+						<span class="own-shipping-info">
+							<label for="order_custom2">Carrier and Account #:</label>
+							<input type="text" name="order_custom2" value="{order_custom2}">
+						</span>
+					</p>
+				{if:else}
+					
+					<p>We will contact you to discuss shipping options and cost.</p>	
+					
+				{/if}
+
+				<span id="cart_no_shipping" data-weight="{cart_weight}" data-missing="{missing_dimensions}"></span>
+				{/exp:bmi_custom:cart_no_shipping}
+
+				
+			</div>
+
+
+			{!-- hidden real update button --}
+			<input type="submit" name="update_cart" id="update-button-shipping" value="Update Cart"  style="display:none;"/>
+
+			{/exp:store:checkout}
+
+			{exp:store:checkout
+				return="cart/confirmation/ORDER_HASH"
+				error_handling="inline"
+				error_delimiters='<span class="error">|</span>'
+				require="payment_method"
+				disable_javascript="yes"
+				secure="{global:secure}"
+			}
+
+			{!-- get the hidden shipping field if it was unable to be calculated --}
+			{exp:bmi_custom:cart_no_shipping}
+				{if missing_dimensions == 'y' || cart_weight > 50 || container_self == 'y'}
+				<input type="hidden" name="shipping_method" value="3">
+				{/if}
+			{/exp:bmi_custom:cart_no_shipping}	
+			
+
+			{if billing_country != "US" || shipping_country != "US"}
+			<div class="billing-section payment-options international-shipping">
+				<h1 class="billing-heading page-heading">Payment for International Orders</h1>
+
+				<p>We will ship most products internationally.</p>
+
+				<p><strong>Accepted payment methods:</strong></p>
+
+				<ul>
+					<li>
+						<strong>Verified PayPal Accounts</strong><br>
+						with matching Ship To address
+					</li>
+					<li>
+						<strong>Credit Cards</strong><br>
+						with matching Bill To and Ship To addresses
+					</li>
+					<li>
+						<strong>Wire Transfer of Funds</strong><br>
+						{lv_global_wire_transfer}
+					</li>	
+				</ul>
+
+				<p>We reserve the right to cancel a payment or order if we cannot verify your information.</p>
+				<p>Please contact us if you have any questions.</p>
+
+			</div>
+			{/if}
+			
+			<div class="billing-section payment-options">
+				<h1 class="billing-heading page-heading">Select Your Payment Method</h1>
+				{error:payment_method}
+				<p><input type="radio" name="payment_method" id="paypal" value="PayPal_Express" {if payment_method == "PayPal_Express"}checked="checked"{/if}> <label for="option"><img src="/img/paypal.png"></label></p>
+				<div class="paypal">
+					<h1>PAYPAL</h1>
+				</div>
+				<p><input type="radio" name="payment_method" id="credit" value="PayPal_Pro" {if payment_method == "PayPal_Pro"}checked="checked"{/if}> <label for="credit"><img src="/img/credit.png"></label></p>
+				<div class="credit" {if payment_method=="PayPal_Pro"}style="display:block;"{/if}>
+					<h1 class="billing-heading page-heading">Pay with Credit Card</h1>
+					<p class="card-name"><input type="text" placeholder="Name on Card:*" name="payment[card_name]"></p>
+
+					<p class="card"><select name="payment[card_type]" id="card">
+					<option value="">Card Type:*</option>
+						<option value="visa">Visa</option>
+    					<option value="mastercard">MasterCard</option>
+    					<option value="amex">American Express</option>
+    					<option value="discover">Discover</option>
+					</select></p>
+
+					<p><input type="text" placeholder="Credit Card Number:*" name="payment[card_no]"></p>
+
+					<p class="security-code"><input type="text" placeholder="Security Code:*" name="payment[csc]"></p>
+
+					<p class="expiration">
+					Expiration Date:*
+					<select name="payment[exp_month]" id="exp-month">
+						<option value="">Month:*</option>
+						<option value="01">01 - Jan</option>
+						<option value="02">02 - Feb</option>
+						<option value="03">03 - Mar</option>
+						<option value="04">04 - Apr</option>
+						<option value="05">05 - May</option>
+						<option value="06">06 - Jun</option>
+						<option value="07">07 - Jul</option>
+						<option value="08">08 - Aug</option>
+						<option value="09">09 - Sep</option>
+						<option value="10">10 - Oct</option>
+						<option value="11">11 - Nov</option>
+						<option value="12">12 - Dec</option>
+					</select>
+					
+					<select name="payment[exp_year]" id="exp-year">
+						<option value="">Year:*</option>
+						<option value="2014">2014</option>
+						<option value="2015">2015</option>
+						<option value="2016">2016</option>
+						<option value="2017">2017</option>
+						<option value="2018">2018</option>
+						<option value="2019">2019</option>
+						<option value="2020">2020</option>
+					</select>
+					</p>
+					<span class="required">*Required Fields</span></p>
+				</div>
+				<p><input type="radio" name="payment_method" id="wire" value="wiretransfer" {if payment_method == "wiretransfer"}checked="checked"{/if}> <label for="option"><img src="/img/wire.png"></label></p>
+				<div class="wire">
+					<h1>WIRE TRANSFER</h1>
+				</div>
+			
+				<div class="order-notes">
+					<strong>Order Notes / Special Instructions</strong>
+					<textarea name="order_custom1" id="" cols="30" rows="10">{order_custom1}</textarea>
+				</div>
+
+			</div>
+
+			{!-- hidden real update button --}
+			<input type="submit" name="update_cart" id="update-button" value="Update Cart"  style="display:none;"/>
+
+			{!-- hidden real submit button, triggered by js --}
+			<input type="submit" name="submit" id="submit-button" class="" value="Place Your Order" style="display:none;"/>
+
+			{exp:stash:set:nested name="accept_error"}{error:accept_terms}{/exp:stash:set:nested}
+			
+			{!-- hidden real accept_check field --}
+			<input type="hidden" id="accept_check" name="accept_terms" value="{accept_terms}">
+
+
+		
+			{/exp:store:checkout}
+		</section>
+		<aside class="cart-side">
+			<h1 class="billing-heading page-heading">Shopping Cart</h1>
+			{exp:stash:get name="sidebar-cart"}
+
+			{exp:stash:get name="accept_error" process="end"}
+				
+			<p class="terms"><input type="checkbox" id="accept_check_sidebar" value="1"> <label for="">I accept the <a href="{path="cart/modal-terms-conditions"}" class="modal-link">Terms and Conditions</a></label></p>
+
+			<p><a href="#" class="btn pay" id="checkout_submit">Place Your Order</a></p>
+
+			
+
+		</aside>
+		
+	</div>
+	
+	
+{/exp:stash:set}
+
+
+
+{exp:stash:append name="misc_body_end"}
+<script type="text/javascript" src="/js/jquery.cookie.js"></script>
+<script type="text/javascript">
+	$(function(){
+		// show/hide the own shipping account details when own shipping account
+		// option is selected
+		$('input[name=shipping_method]').click(function(){
+			val = $(this).val();
+			if(val == 2)
+			{
+				$('.own-shipping').show();
+			}
+			else
+			{
+				$('.own-shipping').hide();
+			}	
+		});
+
+		// show/hide the credit card details when credit payment option
+		// is selected
+		$('input[name=payment_method]').click(function(){
+			val = $(this).val();
+			console.log(val);
+
+			if(val == 'PayPal_Pro')
+			{
+				$('.credit').show();
+			}
+			else
+			{
+				$('.credit').hide();
+			}	
+		});
+
+		// on click of pretty submit button, trigger actual cart submit
+		$('#checkout_submit').click(function(e){
+			e.preventDefault();
+
+			$('#submit-button').click();
+		});
+
+		// update the cart on shipping selection
+		$('input[name=shipping_method]').click(function(){
+			$('#mask').show();
+			$('#update-button-shipping').click();
+		});
+
+		// update the cart on entry of own shipping info
+		$('input[name=order_custom2]').change(function(){
+			$('#mask').show();
+			$('#update-button-shipping').click();
+		});
+
+		// adjust the accept_terms hidden field based on the sidebar
+		// checkbox
+		$('#accept_check_sidebar').click(function(){
+			val = $(this).val();
+
+			if(val == 1)
+			{
+				$('#accept_check').val(1);
+			}
+			else
+			{
+				$('#accept_check').val(0);
+			}
+
+		});
+
+		// default the accept checkbox, if needed checkbox
+		accept_check = $('#accept_check').val();
+
+		if(accept_check == 1)
+		{
+			$('#accept_check_sidebar').attr('checked', 'checked');
+		}
+
+		// shipping modals for if the cart is over 50 pounds or
+		// dimensions are missing
+		cart_weight = $('#cart_no_shipping').data('weight');
+		missing = $('#cart_no_shipping').data('missing');
+
+		modal_shown = $.cookie("modal");
+
+		if(missing == 'y' && modal_shown != 1)
+		{
+			$.fancybox.open({
+				href		: '/cart/modal-missing',
+				maxWidth	: 650,
+				maxHeight	: 450,
+				fitToView	: false,
+				width		: '75%',
+				height		: '75%',
+				autoSize	: false,
+				closeClick	: false,
+				openEffect	: 'none',
+				closeEffect	: 'none',
+				type 		: 'ajax',
+				closeBtn	: false,
+				modal 		: true
+			});
+			$.cookie("modal", 1);
+		}else if(cart_weight > 50  && modal_shown != 1)
+		{
+			$.fancybox.open({
+				href		: '/cart/modal-weight',
+				maxWidth	: 650,
+				maxHeight	: 450,
+				fitToView	: false,
+				width		: '75%',
+				height		: '75%',
+				autoSize	: false,
+				closeClick	: false,
+				openEffect	: 'none',
+				closeEffect	: 'none',
+				type 		: 'ajax',
+				closeBtn	: false,
+				modal 		: true
+			});
+			$.cookie("modal", 1);
+		}
+
+		$('input.alert-continue').change(function(){
+
+			$.fancybox.close();
+		});	
+
+
+
+	});
+</script>
+{/exp:stash:append}

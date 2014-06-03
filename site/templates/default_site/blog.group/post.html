@@ -1,0 +1,89 @@
+{embed="site/.wrapper"}
+
+{if segment_3 == ""}
+	{redirect="404"}
+{/if}	
+
+{snippet:blog_category_sidebar}
+{snippet:global_social_scripts}
+
+{exp:stash:set name="robots"}
+			<meta name="robots" value="INDEX,FOLLOW">
+	{/exp:stash:set}
+
+{exp:channel:entries 
+	limit="1" 
+	disable="category_fields|member_data|pagination"
+	channel="blog"
+	dynamic="no"
+	url_title="{segment_3}"
+}
+	{if no_results}
+		{redirect="404"}
+	{/if}
+
+	{exp:stash:set_value name="seo_entry" value="{url_title}"}
+	{exp:stash:set_value name="body_class" value="blog blog-post blog-{url_title}"}
+
+	{exp:stash:set name="body"}
+	<div class="primary">
+		<div class="breadcrumbs">
+			<ul>
+				<li><a href="{site_url}">Home</a></li>
+				<li><a href="{path="blog"}">Blog</a></li>
+				<li>{title}</li>
+			</ul>
+		</div>
+
+		<div class="lead-blurb blog-heading">
+			<h1 class="page-heading">BMI Surplus Blog</h1>
+		</div>
+
+		<article class="post">
+			<header>
+				<div class="image-ico">
+					{exp:ce_img:single src="{blog_image}" alt="{title}" width="58" height="58"}
+				</div>
+				<div class="post-meta">
+					<h1 class="article-title">{title}</h1>
+					<h2 class="article-subheading">BMI Surplus on {entry_date format="%F %j, %Y"}</h2>
+					<h2 class="categories article-subheading">{categories backspace="2"}<a href="{path="blog"}">{category_name}</a>, {/categories}</h2>
+				</div>
+			</header>
+			<section>
+				{blog_body}
+
+				<div id="disqus_thread"></div>
+			</section>
+		</article>
+		<aside class="social">
+			<ul>
+				<li><a href="https://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+			</li>
+				<li><div class="fb-like" data-href="{url_title_path="blog/post"}" data-layout="box_count" data-action="like" data-show-faces="false" data-share="true"></div></li>
+
+				
+			</ul>
+		</aside>
+			
+	</div>
+	{/exp:stash:set}
+{/exp:channel:entries}	
+
+{exp:stash:append name="misc_body_end"}    
+	<script type="text/javascript">
+	    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	    var disqus_shortname = 'bmisurplus'; // required: replace example with your forum shortname
+
+	    /* * * DON'T EDIT BELOW THIS LINE * * */
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+{/exp:stash:append}    
+    
+
+
+

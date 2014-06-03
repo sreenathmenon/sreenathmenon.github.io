@@ -1,0 +1,110 @@
+{exp:stash:append name="misc_body_end"}
+<script type="text/javascript">
+	$(function(){
+		$('#manufacturer').change(function(){
+			val = $(this).val();
+			create_url('manufacturer', encodeURIComponent(val));	
+		});
+
+		$('#items').change(function(){
+			val = $(this).val();
+			create_url('limit', val);
+		});
+
+		$('.sort_link').click(function(e){
+			e.preventDefault();
+			val = $(this).attr('id');
+			if(val != "")
+			{
+				create_url('sort', val);
+			}	
+		});
+
+	});
+
+
+
+	function create_url(key, value)
+	{
+		// grab the hostname and path for generating a new url
+		var url = window.location.href.split('?')[0];
+			
+		// grab the query string	
+		var query = window.location.search.substring(1);
+
+		// split the query string into each individual variables key=value
+		var pairs = query.split("&");
+
+		var new_variable = true;
+
+		var new_pairs =  new Array();
+
+		// loop through the pairs
+		for(index = 0; index < pairs.length; index++)
+		{
+			
+			// split the pair into key and value
+			var single = pairs[index].split('=');
+
+			// do we have 2 parts?
+			if(single.length == 2)
+			{
+				// is this existing key the one 
+				// we're replacing?
+				if(single[0] == key)
+				{
+					// is there a new value?
+					// if not we must be removing this key
+					if(value)
+					{
+						new_pairs.push(key + '=' + value);
+
+					}
+					new_variable = false;
+				}
+				// this is a key that already exists
+				// so we just copy it over
+				else
+				{
+					new_pairs.push(pairs[index]);
+					
+				}	
+
+			} // end if there are 2 parts
+
+		} // end loop through existing variables
+
+		// if we didn't replace or remove, it's a new variable
+		// so add it to the array
+		if(new_variable == true)
+		{
+			//console.log('new variable: ' + key + '=' + value);
+			new_pairs.push(key + '=' + value);
+		}	
+
+		// do we have variables?
+		if(new_pairs.length > 0)
+		{
+			url += '?';
+
+			// loop through new variables
+			for(index = 0; index < new_pairs.length; index++)
+			{
+				// if this isn't the first variable
+				// add an &
+				if(index > 0)
+				{
+					url += '&';
+				}
+				
+				// append the new pair onto the url
+				url += new_pairs[index];	
+			} // end for loop through new_pairs	
+			
+		} // end we have variables
+
+		// redirect to new url 
+		window.location.href = url;
+	}
+</script>
+{/exp:stash:append}		

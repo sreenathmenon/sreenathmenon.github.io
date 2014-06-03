@@ -1,0 +1,266 @@
+{!--
+	Wrapper Template
+
+	Stashes in use:
+		seo_entry		url_title of entry to be pulled by seo lite
+		robots			html of robots meta tag
+		body 			main body of page
+		misc_head		miscelleneous code to be added to <head>
+		misc_body_start	miscellaneous code to be added just after the opening body tag
+		misc_body_end	miscellaneous code to be added just before the closing body tag
+		body_class		class to be added to body tag
+		sidebar			sidebar of page
+
+
+--}<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<!-- Added by Sreenath for Google Verification -->
+	<meta name="google-site-verification" content="5lBdR-ViQX1QapiNY8nFT1U4JhSIbt88XJ5f19ezO7U" />
+
+        <!-- {exp:stash:seo_entry} -->
+        {if "{exp:stash:seo_entry}" != ""}
+        	{exp:stash:parse process="end"}
+        		{exp:seo_lite url_title="{stash:seo_entry}"}
+        	{/exp:stash:parse}	
+        {if:elseif segment_1}
+        	{exp:seo_lite use_last_segment="yes"}
+        {if:else}
+        	{exp:seo_lite url_title="homepage"}
+        {/if}	
+
+        {exp:ifelse parse="inward"}
+	    	{if segment_1 != "cart" || segment_2 != "payment-shipping"}
+	    		{exp:dm_force_ssl:unforce}
+	    	{/if}	
+    	{/exp:ifelse}
+
+        
+        {exp:stash:robots}
+
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+            <!--[if lt IE 9]>
+                <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+            <![endif]-->
+        
+
+        <link rel="shortcut icon" href="/favicon.ico">
+        
+
+        <!-- Stylesheets -->
+        <link href="{site_url}css/main.css" rel="stylesheet" type="text/css" media="all"/>
+        <link href="{site_url}js/fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" media="all"/>
+
+        {exp:stash:misc_head}
+
+    </head>
+    <body class="{exp:stash:body_class}">
+        <script>
+            var _gaq=[['_setAccount','{global:google_analytics}'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src='//www.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <div id="fb-root"></div>
+        {exp:stash:misc_body_start}
+        
+        
+        <div class="header-bar"></div>
+
+		<div class="wrapper">
+			{!-- header --}
+			<header class="main">
+				<div class="logo">
+					<h1><a href="{site_url}">BMI Surplus</a></h1>
+					<h2 class="tagline">Quality new &amp; used scientific equipment, in-stock &amp; ready to ship</h2>
+				</div>
+				<div class="header-meta">
+					<div class="utility-links">
+						<ul>
+							{if logged_in}
+								<li><a href="{path="account"}">My Account</a></li>
+								<li><a href="{exp:freemember:logout_url}">Logout</a></li>
+							{if:else}
+								<li><a href="{path='account/login'}">Login</a></li>
+							{/if}	
+							{exp:store:cart}
+								{if no_items}
+									<li class="shopping-cart"><a href="{path="cart"}">My Shopping Cart <span>0</span></a></li>
+								{/if}
+								<li class="shopping-cart"><a href="{path="cart"}">My Shopping Cart <span>{order_qty}</span></a></li>
+							{/exp:store:cart}
+							
+						</ul>
+					</div>
+					<div class="phone">
+						<h2 class="callout-heading">Buy online or call <strong>{lv_global_phone}</strong></h2>
+					</div>
+					<div class="search">
+						<input type="text" id="search" placeholder="Search by manufacturer, model # or product name" />
+						<div id="results_popup">
+							{!-- results load here --}
+						</div>
+					</div>
+				</div>
+			</header>
+
+			{!-- navigation --}
+			<nav class="main">
+				{exp:navee:nav 
+					nav_title="main"
+					selected_class="active"
+					max_depth="1"
+				}
+			</nav>
+		    
+		    {!-- content --}    
+			<div class="main-content">
+				{exp:stash:sidebar}
+
+				{exp:stash:body}
+
+				{exp:stash:sidebar_right}
+			</div>
+
+		    {!-- footer --}
+		    <footer class="main">
+				<div class="footer-links">
+
+					{!-- footer category links --}
+					{exp:navee:custom 
+						nav_title="global_category_links" 
+						wrap_type="none"
+						no_selected="true"
+						max_depth="2"
+					}
+   						{if level == 1}
+   						<section>
+						<header>
+							<h2 class="sub-heading-section">{text}</h2>
+						</header>
+						<ul>
+						{kids}	
+   						{/if}
+
+   						{if level == 2}
+   							<li><a href="{link}">{text}</a></li>
+   						{/if}
+
+   						{if IS_LAST_ITEM_ON_LEVEL && level == 2}
+   							</ul>
+   						</section>	
+   						{/if}
+
+   						{if level == 1 && KID_COUNT < 1}
+   							</ul>
+   						</section>	
+   						{/if}
+
+					{/exp:navee:custom}
+					
+					{!-- social links --}
+					<section>
+						<header>
+							<h2 class="sub-heading-section">Follow us</h2>
+						</header>
+						<ul class="social-links">
+							{exp:low_variables:pair var="lv_social"}
+								<li><a href="{lv_social:social_link}" target="_blank"><img src="{lv_social:social_icon}"></a></li>
+							{/exp:low_variables:pair}
+						</ul>
+					</section>
+				</div>
+				<div class="footer-sub-info">
+					<section class="contact-info">
+						<header>
+							<h2 class="sub-heading-section">BMI Surplus, Inc.</h2>
+						</header>
+						<p>
+							{lv_global_address}
+							<br>
+							Direct: {lv_global_phone}
+							<br>
+							Fax: {lv_global_fax}<br>
+						<span>CAGE Code: 639A3</span></p>
+					</section>
+					<section class="payment-options">
+						<header>
+							<h2 class="sub-heading-section">Payment options:</h2>
+						</header>
+						<img src="/img/payments.png" alt="Payment Options">
+						<ul class="secure-icons">
+							<li><img src="/img/verified.png" alt="Verified & Secured"></li>
+							<li><img src="/img/bbb.png" alt="BBB Accredited Business"></li>
+						</ul>
+					</section>
+					<section class="newsletter">
+						<header>
+							<h2>Join our mailing list</h2>
+						</header>
+						<form action="{path="contact-us/subscribe"}" method="post">
+							<input type="text" placeholder="First Name" name="first_name">
+							<input type="text" placeholder="Last Name" name="last_name">
+							<input type="email" placeholder="Email" name="email">
+							<input type="hidden" name="XID" value="{XID_HASH}">
+							<input type="submit" class="subt" value="">
+						</form>	
+						<a href="{path="modal/privacy-policy"}" class="modal-link">Privacy</a>
+					</section>
+				</div>
+				<div class="utility-links">
+					{exp:navee:nav 
+						nav_title="footer"
+						selected_class="active"
+					}
+				</div>
+
+			</footer>
+		</div>{!-- end wrapper --}
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="{site_url}js/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script type="text/javascript" src="{site_url}js/jquery.typewatch.js"></script>
+
+        <script type="text/javascript">
+        	$(function(){
+
+        		var options = {
+    				callback: function (value) { 
+    					keywords = $(this).val();
+
+						$('#results_popup').html('<p>Searching...</p>').load('/search/live/' + encodeURIComponent(keywords)).show();
+	
+    				},
+    				wait: 750,
+    				highlight: true,
+    				captureLength: 3
+				}
+
+				$("#search").typeWatch( options );
+
+				$('#search').keyup(function(){
+					if(!$(this).val())
+        			{
+        				$('#results_popup').hide();
+        			}
+				}); 	
+
+        	});
+        </script>
+
+        {snippet:global_modal}
+
+        {exp:stash:misc_body_end}
+    </body>
+</html>

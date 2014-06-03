@@ -1,0 +1,79 @@
+{if segment_2 == ""}
+	{redirect="404"}
+{/if}
+
+{embed="site/.wrapper"}
+
+{snippet:sidebar_flyout}
+{snippet:products_category_products_scripts}
+
+	{exp:stash:set_value name="seo_entry" value="search-results"}
+	{exp:stash:set_value name="body_class" value="search-results"}
+
+	{exp:stash:set name="robots"}			
+		<meta name="robots" value="NOINDEX,NOFOLLOW">
+	{/exp:stash:set}
+
+
+	{exp:ifelse parse="inward"}
+		
+		{if get:sort == "name"}
+			{exp:stash:set name="search_sort"}asc{/exp:stash:set}
+			{exp:stash:set name="search_order"}title{/exp:stash:set}
+		{if:elseif get:sort == "pricea"}
+			{exp:stash:set name="search_sort"}asc{/exp:stash:set}
+			{exp:stash:set name="search_order"}product_price{/exp:stash:set}
+		{if:elseif get:sort == "priced"}
+			{exp:stash:set name="search_sort"}desc{/exp:stash:set}
+			{exp:stash:set name="search_order"}product_price{/exp:stash:set}
+		{if:else}
+			{exp:stash:set name="search_sort"}desc{/exp:stash:set}
+			{exp:stash:set name="search_order"}relevance{/exp:stash:set}
+		{/if}
+
+		{if get:limit != "0"}
+			{exp:stash:set name="search_limit"}{get:limit}{/exp:stash:set}
+		{if:else}
+			{exp:stash:set name="search_limit"}24{/exp:stash:set}
+		{/if}
+
+		{if get:manufacturer != ""}
+			{exp:stash:set name="search_manufacturer"}{get:manufacturer}{/exp:stash:set}
+		{/if}	
+
+	{/exp:ifelse}
+
+	
+		
+
+
+	{exp:stash:set name="body"}
+		<div class="primary">
+			<div class="breadcrumbs">
+				<ul>
+					<li><a href="{site_url}">Home</a></li>
+	
+					<li>Search Results</li>
+
+					<li>{segment_2}</li>
+
+				</ul>
+			</div>
+
+			
+
+			{embed="search/.search_results"}
+
+		</div>
+	{/exp:stash:set}
+
+	{exp:ifelse parse="inward"}
+		{if category_type == "products"}
+			{snippet:products_category_products_scripts}
+		{/if}
+	{/exp:ifelse}
+
+
+
+
+			

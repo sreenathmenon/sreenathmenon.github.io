@@ -1,0 +1,15 @@
+<div class="breadcrumbs">
+	<ul>
+		<li><a href="{site_url}">Home</a></li>
+		
+
+		{exp:navee:custom_crumbs wrap_type="none"}
+			{if is_last_item}
+				<li>{text}</li>
+			{if:else}
+				<li><a href="{link}">{text}</a></li>
+			{/if}	
+		{/exp:navee:custom_crumbs}
+		
+	</ul>
+</div>

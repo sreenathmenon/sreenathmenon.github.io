@@ -1,0 +1,31 @@
+{exp:stash:set name="sidebar_right"}
+	{if segment_3_category_id != "" || segment_2 == "" || paginated || segment_2 == "post"}
+	<aside class="main">
+		
+		<div class="aside-newsletter">
+			<h2 class="callout-heading">Join our <br>Mailing List</h2>
+			
+			<form action="{path="contact-us/subscribe"}" method="post">		
+				<input type="hidden" name="XID" value="{XID_HASH}">
+				<input type="email" name="email" placeholder="Enter your email address">
+				<input type="submit" class="subscribe" value="">
+			</form>	
+		</div>
+		
+		<div class="category-list">
+			<header>
+				<h1 class="featured-headline">Categories</h1>
+			</header>
+			<ul>
+				{exp:channel:categories
+					channel="blog"
+					style="linear"
+				}
+					<li><a href="{path='blog'}">{category_name}</a></li>
+				{/exp:channel:categories}
+				
+			</ul>
+		</div>
+	</aside>
+	{/if}
+{/exp:stash:set}

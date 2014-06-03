@@ -1,0 +1,52 @@
+{embed="site/.wrapper"}
+
+{snippet:sidebar_flyout}
+
+{exp:channel:entries limit="1" disable="{snippet:global_disable_single}" dynamic="no" url_title="{segment_3}" channel="products"}
+
+	{exp:stash:set_value name="seo_entry" value="{url_title}"}
+	{exp:stash:set_value name="body_class" value="product-ask-confirm product-ask-confirm-{url_title}"}
+
+
+	{exp:stash:set name="robots"}
+		<meta name="robots" value="NOINDEX,NOFOLLOW">
+	{/exp:stash:set}
+
+
+	{exp:stash:set name="body"}
+		<div class="primary">
+			<div class="breadcrumbs">
+				<ul>
+					<li><a href="{site_url}">Home</a></li>
+
+					{!-- category crumbs --}
+					{exp:playa:children field="product_categories" limit="1" var_prefix="cat"}
+						
+						{exp:navee:custom_crumbs 
+							wrap_type="none"
+							entry_id="{cat:entry_id}"
+						}
+							<li><a href="{link}">{text}</a></li>
+						{/exp:navee:custom_crumbs}
+					{/exp:playa:children}
+
+					{!-- current product --}
+					<li>{title}</li>
+					
+				</ul>
+			</div>
+			
+			<article class="post">
+				
+				<section>
+					
+					<p>Your question about {title} has been sent. We will contact you shortly.</p>
+
+					<p><a href="{url_title_path="products"}" class="go-back">Back to Product</a></p>
+
+				</section>
+			</article>
+			
+		</div>
+	{/exp:stash:set}
+{/exp:channel:entries}

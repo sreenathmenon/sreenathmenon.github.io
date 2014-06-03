@@ -1,0 +1,108 @@
+{embed="site/.wrapper"}
+
+{if segment_3 == ""}
+	{redirect="404"}
+{/if}
+
+{exp:stash:set name="robots"}
+	<meta name="robots" value="NOINDEX,NOFOLLOW">
+{/exp:stash:set}
+
+{exp:stash:set_value name="seo_entry" value="order-confirmation"}
+{exp:stash:set_value name="body_class" value="cart-confirmation"}
+
+
+{exp:stash:set name="body"}
+	{exp:store:orders
+		order_hash="{segment_3}"
+	}
+	<div class="checkout">
+		<header>
+			<h1 class="page-heading">Check Out</h1>
+			<nav>
+				<ul>
+					<li>Step 1: Address Information</li>
+					<li>Step 2: Shipping and Payment</li>
+					<li class="active">Step 3: Confirmation</li>
+				</ul>
+			</nav>
+		</header>
+		<aside class="verified">
+			<img src="/img/verified.png" alt="Verified & Secured">
+		</aside>
+		<section class="billing">
+			<div class="billing-section">
+				<h1 class="billing-heading page-heading">Thank you! Your Order is Complete!</h1>
+				<p class="order-notice">Your order number is {order_id}.</p>
+				<p>A confirmation email has been sent to you.</p>
+				<p class="alert-message">IF YOU RECEIVED AN ALERT MESSAGE DURING CHECKOUT WE WILL CONTACT YOU TO COMPLETE YOUR ORDER.</p>
+				<p>We are here to help, so feel free to call us with any questions at 781-871-8868 or email us at <a href="mailto:sales@bmisurplus.com">sales@bmisurplus.com</a>.</p>
+
+				<div class="social-side">
+					<ul>
+						{!--<li class="facebook"><a href="#">Like Us!</a></li>
+						<li class="twitter"><a href="#">Follow Us!</a></li>
+						<li class="linkedin"><a href="#">Follow Us!</a></li>--}
+						{exp:low_variables:pair var="lv_social" limit="3"}
+							<li><a href="{lv_social:social_link}" target="_blank"><img src="{lv_social:social_icon}"> <span>{lv_social:action_text}</span></a></li>
+						{/exp:low_variables:pair}
+					</ul>
+				</div>
+				<div class="buttons confirm-continue">
+					<a href="{path="/"}" class="continue-shopping btn forward">Continue Shopping</a>
+				</div>
+			</div>
+		</section>
+		<aside class="cart-side">
+			{items}
+			<section>
+				{exp:ce_img:single 
+					src="{lv_product_image_path}{exp:bmi_custom:item_primary_image product_id='{entry_id}'}" 
+					alt="{title}" 
+					width="64" 
+					height="64" 
+					crop="yes"
+					fallback_src="/img/product-blank.gif"
+					parse="inward"
+				}
+				<h1>{title}</h1>
+				<div class="price-info">
+					<p>Price: {price}</p>
+					<p><span>Quantity:</span> {item_qty}</p>
+					{!--<p><a href="#">Delete</a> • <a href="#">Update</a></p>--}
+				</div>
+			</section>
+			{/items}
+
+			<footer>
+				<p>Subtotal: <span>{order_subtotal}</span></p>
+				
+				{if order_discount_val > 0}<p>Discount <span>-{order_discount}</span></p>{/if}
+				<p>Shipping: <span>{order_shipping}</span></p>
+				<p>Tax: <span>{order_tax}</span></p>
+				<p class="total">Total: <span>{order_total}</span></p>
+			</footer>
+
+			
+		</aside>
+	</div>
+
+	{!-- handle mailing list subscription --}
+	{exp:ifelse parse="inward"}
+		{if order_custom3 == 'y'}
+			{exp:bmi_custom:mailing_list_subscribe
+				email="{order_email}"
+				first_name="{billing_first_name}"
+				last_name="{billing_last_name}"
+			}
+		{/if}
+	{/exp:ifelse}
+
+	{/exp:store:orders}
+{/exp:stash:set}
+
+
+
+{exp:stash:append name="misc_body_end"}
+
+{/exp:stash:append}

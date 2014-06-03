@@ -1,0 +1,26 @@
+<script src="{site_url}js/fancybox/jquery.fancybox.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('.modal-link').fancybox({
+			maxWidth	: 600,
+			maxHeight	: 400,
+			fitToView	: false,
+			width		: '70%',
+			height		: '70%',
+			autoSize	: false,
+			closeClick	: true,
+			openEffect	: 'none',
+			closeEffect	: 'none',
+			type 		: 'ajax'
+		});
+
+		$('.zoom').fancybox({
+			fitToView	: true,
+			autoSize	: true,
+			closeClick	: true,
+			openEffect	: 'none',
+			closeEffect	: 'none'
+		});
+	});
+</script>
+	

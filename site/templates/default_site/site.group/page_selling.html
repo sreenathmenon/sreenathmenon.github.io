@@ -1,0 +1,75 @@
+{embed="site/.wrapper"}
+
+{snippet:sidebar_flyout}
+
+{!-- load page entry --}
+{exp:channel:entries limit="1" disable="{snippet:global_disable_single}" dynamic="no" url_title="newest" channel="pages"}
+	{exp:stash:set_value name="seo_entry" value="{url_title}"}
+	{exp:stash:set_value name="body_class" value="category category-{url_title}"}
+
+	{exp:stash:set name="body"}
+		<div class="primary">
+			<div class="breadcrumbs">
+				<ul>
+					<li><a href="{site_url}">Home</a></li>
+					<li>Selling Your Equipment</li>
+
+				</ul>
+			</div>
+
+			<div class="featured-product product-view">
+				<h1 class="page-heading">Selling Your Equipment</h1>
+				<div class="general-form">
+					<h2 class="featured-headline">Let's Talk</h2>
+					<p>Let us know your questions or make us an offer.</p>	
+					<div class="form-collection">
+						{exp:freeform:form
+							form_name="selling_your_equipment"
+    						return="selling-your-equipment/submit"
+    						required="name|company|email|phone"
+    						form:enctype="multipart/form-data" 
+						}
+						<p class="form-item"><label for="name">Name:*</label>
+						<input type="text" name="name"></p>
+
+						<p class="form-item"><label for="company">Company:*</label>
+						<input type="text" name="company"></p>
+
+						<p class="form-item"><label for="phone">Phone:*</label>
+						<input type="text" name="phone"></p>
+
+						<p class="form-item"><label for="email">Email:*</label>
+						<input type="text" name="email"></p>
+
+						<p class="form-item"><label for="message">Message:</label>
+						<textarea name="message" id="" cols="30" rows="10"></textarea></p>
+
+						<p class="form-item"><label for="file_upload">Browse:</label>
+						{freeform:field:file_upload show="1"}</p>
+
+                                                <!-- Added by Sreenath for adding captcha -->
+ 	                                        <p class="form-item">
+        		         	               {if freeform:captcha}
+                        	         	              {freeform:captcha}<input type="text" style="width:120px; height:28px; float:right;" name="captcha" />
+                                                       {/if}
+                                                </p>
+
+						<span>* Required Fields</span>
+
+						<p class="form-item"><input type="submit" class="post-message">
+						<a class="privacy modal-link" href="{path="modal/privacy-policy"}">We respect your privacy</a>
+						</p>
+						{/exp:freeform:form}
+					
+					</div>
+				</div>
+			</div>
+		</div>
+
+	{/exp:stash:set}
+
+{/exp:channel:entries}	
+
+
+
+			

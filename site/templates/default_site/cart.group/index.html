@@ -1,0 +1,126 @@
+{embed="site/.wrapper"}
+
+{exp:stash:set name="robots"}
+	<meta name="robots" value="NOINDEX,NOFOLLOW">
+{/exp:stash:set}
+
+{exp:stash:set_value name="body_class" value="cart-index"}
+
+{exp:stash:set name="body"}
+	
+	<div class="cart">
+		<div class="cart-head">
+			{!--<a href="#" class="btn next_submit">Proceed to Checkout</a>--}
+		</div>
+		<header>
+			<h1 class="page-heading">Shopping Cart</h1>
+			<nav>
+				<ul>
+					<li>Step 1: Address Information</li>
+					<li>Step 2: Shipping and Payment</li>
+					<li>Step 3: Confirmation</li>
+				</ul>
+			</nav>
+		</header>
+		{exp:store:checkout
+			next="cart/address"
+			form_id="checkout_form"
+
+		}
+
+		{if no_items}
+			<table class="cart-items">
+				<tr>
+					<td><p>Your cart is empty.</p></td>
+				</tr>
+			</table>		
+		{/if}
+
+		<table class="cart-items">
+			{items}
+			<tr>
+				<td class="cart-image">
+					{exp:ce_img:single 
+						src="{lv_product_image_path}{exp:bmi_custom:item_primary_image product_id='{entry_id}'}" 
+						alt="{title}" 
+						width="120" 
+						height="120" 
+						crop="yes"
+						fallback_src="/img/product-blank.gif"
+						parse="inward"
+					}
+				</td>
+				<td class="cart-title">
+					<h1 class="featured-headline">{title}</h1>
+					<h2>SKU: <span>{sku}</span></h2>
+				</td>
+				<td class="cart-quantity">
+					<div class="quantity-order">
+						Quantity: <input type="text" class="qty" name="items[{key}][item_qty]" value="{item_qty}">
+					</div>
+					<div class="functions">
+						<a href="#" class="update_link">Update</a>
+						<a href="#" class="delete_link">Delete</a>
+					</div>
+				</td>
+				<td class="price-order">Price: <span>{item_subtotal}</span></td>
+			</tr>
+			{/items}
+			
+		</table>
+		<footer>
+			<div class="coupon">
+				{if promo_code == ""}
+				<h2 class="featured-headline">Coupon Code:</h2>
+				<input type="text" name="promo_code" placeholder="Enter Code">
+				<input type="submit" name="update_cart" value="Apply">
+				{if:else}
+					<p>Coupon code <strong>{promo_code}</strong> is applied.</p>
+				{/if}
+			</div>
+			<div class="subtotal">
+				<p>Shipping Estimated During Checkout</p>
+				<h2>Subtotal: <span>{order_subtotal}</span></h2>
+				{if order_discount_val > 0}<h2>Discount: <span>-{order_discount}</span></h2>{/if}
+				{!--<h2>Total: <span>{order_total}</span></h2>--}
+			</div>
+
+			{!-- hidden real submit button, triggered by js --}
+			<input type="submit" name="next" id="next-button" class="" value="Checkout" style="display:none;"/>
+
+			{!-- hidden real update button --}
+			<input type="submit" name="update_cart" id="update-button" value="Update Cart"  style="display:none;"/>
+
+			<div class="buttons">
+				<a href="{path="/"}" class="continue-shopping btn">Continue Shopping</a>
+				<a href="#" class="btn next_submit">Proceed to Checkout</a>
+			</div>
+		</footer>
+		{/exp:store:checkout}
+	</div>
+	
+{/exp:stash:set}
+
+{exp:stash:append name="misc_body_end"}
+<script type="text/javascript">
+	$(function(){
+
+		$('.next_submit').click(function(e){
+			e.preventDefault();
+			$('#next-button').click();
+		});
+
+		$('.update_link').click(function(e){
+			e.preventDefault();
+			$('#update-button').click();
+		});
+
+		$('.delete_link').click(function(e){
+			e.preventDefault();
+
+			$(this).parent().parent().find('.qty').val('0');
+			$('#update-button').click();
+		});
+	});
+</script>
+{/exp:stash:append}

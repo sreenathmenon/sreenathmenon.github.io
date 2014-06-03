@@ -1,0 +1,207 @@
+{embed="site/.wrapper"}
+
+{if logged_out}
+	{redirect="account/login"}
+{/if}
+
+{snippet:sidebar_flyout}
+
+	{exp:stash:set name="robots"}
+		<meta name="robots" value="NOINDEX,NOFOLLOW">
+	{/exp:stash:set}
+
+	{!--{exp:stash:set_value name="seo_entry" value="{entry_id}"}--}
+	{exp:stash:set_value name="body_class" value="account-index"}
+
+	{exp:stash:set name="body"}
+	<div class="primary">
+		<div class="secondary-feature">
+			<h1 class="page-heading">Edit Account</h1>
+			{exp:freemember:update_profile
+				return="account/edit" 
+				require="m_first_name|m_last_name|email"
+				error_handling="inline" 
+				error_delimiters='<span class="error">|</span>'
+			}
+			<div class="create-account">
+				<div class="general-form account-form">
+					<h2 class="featured-headline">Personal Information</h2>
+					<div class="form-collection">
+						<p class="form-item">
+							<label for="m_first_name">First Name:*</label>
+							{field:m_first_name}
+							{error:m_first_name}
+						</p>
+
+						<p class="form-item">
+							<label for="m_last_name">Last Name:*</label>
+							{field:m_last_name}
+							{error:m_last_name}
+						</p>
+
+						<p class="form-item">
+							<label for="email">Email:*</label>
+							{field:email}
+							{error:email}
+						</p>
+
+						<p class="form-item">
+							<label for="m_phone">Phone:</label>
+							{field:m_phone}
+							{error:m_phone}
+						</p>
+
+						<p class="form-item checkbox">
+							<input type="hidden" name="m_subscribe" value="n">
+							<input type="checkbox" {if m_subscribe == "y"}checked{/if} id="newsletter" value="y" name="m_subscribe"> 
+							<label for="m_subscribe">Yes, I'd like to receive BMI news, offers, newsletters</label>
+						</p>
+					</div>
+					<h2 class="featured-headline">Change Password</h2>
+					<p>Enter your new password below, then confirm it by entering it again.</p>
+					<div class="form-collection">
+						<p class="form-item">
+							<label for="password">Password:*</label>
+							{field:password}
+							{error:password}
+						</p>
+
+						<p class="form-item">
+							<label for="password_confirm">Confirm Password:*</label>
+							{field:password_confirm}
+							{error:password_confirm}
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="create-account">
+				<div class="general-form account-form">
+					<h2 class="featured-headline">Billing Address</h2>
+					<div class="form-collection">
+						<p class="form-item">
+							<label for="m_billing_company">Company:</label>
+							{field:m_billing_company}
+							{error:m_billing_company}
+						</p>
+
+						<p class="form-item">
+								<label for="m_billing_address_1">Street:</label>
+								{field:m_billing_address_1}
+								{error:m_billing_address_1}
+						</p>
+
+						<p class="form-item">
+								<label for="m_billing_address_2">Street 2:</label>
+								{field:m_billing_address_2}
+								{error:m_billing_address_2}
+						</p>
+
+						<p class="form-item">
+							<label for="m_billing_city">City:</label>
+							{field:m_billing_city}
+							{error:m_billing_city}
+						</p>
+
+						<p class="form-item">
+							<label for="m_billing_state">State:</label>
+							<select name="m_billing_state">
+								{exp:bmi_custom:state_options state_code="{m_billing_state}"}
+							</select>	
+							{error:m_billing_state}
+						</p>
+
+						<p class="form-item">
+							<label for="m_billing_zip">Zip:</label>
+							{field:m_billing_zip}
+							{error:m_billing_zip}
+						</p>
+
+						<p class="form-item">
+							<label for="m_billing_country">Country:</label>
+							<select name="m_billing_country">
+								{exp:bmi_custom:country_options country_code="{m_billing_country}"}
+							</select>
+							{error:m_billing_country}
+						</p>
+
+						{!--<p class="form-item checkbox"><input type="checkbox" checked id="shipping"> <label for="shipping">Shipping address same as billing?</label></p>--}
+					</div>
+					<h2 class="featured-headline">Shipping Address</h2>
+					<div class="form-collection">
+						<p class="form-item">
+							<label for="m_shipping_company">Company:</label>
+							{field:m_shipping_company}
+							{error:m_shipping_company}
+						</p>
+
+						<p class="form-item">
+							<label for="m_shipping_address_1">Street:</label>
+							{field:m_shipping_address_1}
+							{error:m_shipping_address_1}
+						</p>
+
+						<p class="form-item">
+							<label for="m_shipping_address_2">Street 2:</label>
+							{field:m_shipping_address_2}
+							{error:m_shipping_address_2}
+						</p>
+
+						<p class="form-item">
+							<label for="m_shipping_city">City:</label>
+							{field:m_shipping_city}
+							{error:m_shipping_city}
+						</p>
+
+						<p class="form-item">
+							<label for="m_shipping_state">State:</label>
+							<select name="m_shipping_state">
+								{exp:bmi_custom:state_options state_code="{m_shipping_state}"}
+							</select>
+							{error:m_shipping_state}
+						</p>
+
+						<p class="form-item">
+							<label for="m_shipping_zip">Zip:</label>
+							{field:m_shipping_zip}
+							{error:m_shipping_zip}
+						</p>
+
+						<p class="form-item">
+							<label for="m_shipping_country">Country:</label>
+							
+							<select name="m_shipping_country">
+								{exp:bmi_custom:country_options country_code="{m_shipping_country}"}
+							</select>
+							{error:m_shipping_country}
+						</p>
+
+						
+						<p class="form-item"><input type="submit" id="update-button" class="general-submit" value=""></p>
+					</div>
+				</div>
+			</div>
+			{/exp:freemember:update_profile}
+		</div>
+	</div>
+	{/exp:stash:set}
+
+{exp:stash:append name="misc_body_end"}
+<script type="text/javascript">
+	$(function(){
+
+		
+
+		// update the cart on country selection
+		$('select[name=m_billing_country]').change(function(){
+			$('select[name=m_billing_state]').val('');
+			$('#update-button').click();
+		});
+
+		// update the cart on country selection
+		$('select[name=m_shipping_country]').change(function(){
+			$('select[name=m_shipping_state]').val('');
+			$('#update-button').click();
+		});
+	});
+</script>
+{/exp:stash:append}

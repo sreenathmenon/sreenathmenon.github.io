@@ -1,0 +1,128 @@
+{embed="site/.wrapper"}
+
+{snippet:sidebar_flyout}
+
+{exp:stash:set name="robots"}
+		{if paginated}
+			<meta name="robots" value="NOINDEX,FOLLOW">
+		
+		{if:else}
+			<meta name="robots" value="INDEX,FOLLOW">
+		{/if}	
+	{/exp:stash:set}
+
+{exp:stash:set name="newest"}
+	{exp:channel:entries
+		channel="products"
+		disable="categories|member_data"
+		dynamic="no"
+		limit="10"
+		paginate="bottom"
+		start_on="{exp:bmi_custom:newest_entry_start}"
+		parse="inward"
+		sort="desc"
+
+	}
+		<tr>
+			<td class="item-image">
+				<a href="{url_title_path="products"}">
+					{exp:ce_img:single 
+						src="{lv_product_image_path}{product_image_primary_filename}" 
+						alt="{title}" 
+						width="149" 
+						height="89" 
+						crop="yes|center,center|0,0|yes"
+						fallback_src="/img/product-blank.gif"
+					}
+				</a>
+			</td>
+			<td class="item-title">
+				<h1><a href="{url_title_path="products"}">{product_name}</a></h1>
+			</td>
+			<td class="item-sku">
+				{product_details:sku}
+			</td>
+			<td class="item-price">
+				{if "{product_details:price_val}" == '0'}Call to Order{if:else}{product_details:price}{/if}
+			</td>
+		</tr>
+
+		{paginate}
+			{exp:stash:set:nested name="pagination_links"}
+
+				 {pagination_links}
+				      <ul>
+				              {previous_page}
+				                      <li class="prev"><a href="{pagination_url}{if query_string !=""}?{query_string}{/if}">Previous</a></li>
+				              {/previous_page}
+
+				              {page}
+				                      <li class="page-{pagination_page_number} {if current_page}active{/if}"><a href="{pagination_url}{if query_string !=""}?{query_string}{/if}">{pagination_page_number}</a></li>
+				              {/page}
+
+				              {next_page}
+				                      <li class="next"><a href="{pagination_url}{if query_string !=""}?{query_string}{/if}">Next</a></li>
+				              {/next_page}
+				      </ul>
+				{/pagination_links}
+
+			{/exp:stash:set:nested}
+		{/paginate}
+	{/exp:channel:entries}
+
+{/exp:stash:set}
+
+
+{!-- load newest page entry --}
+{exp:channel:entries limit="1" disable="{snippet:global_disable_single}" dynamic="no" url_title="newest" channel="pages"}
+	{exp:stash:set_value name="seo_entry" value="{url_title}"}
+	{exp:stash:set_value name="body_class" value="category category-{url_title}"}
+
+	{exp:stash:set name="body"}
+		<div class="primary">
+			<div class="breadcrumbs">
+				<ul>
+					<li><a href="{site_url}">Home</a></li>
+					<li>Newest Listings</li>
+
+				</ul>
+			</div>
+
+			<div class="lead-blurb">
+			<h1 class="page-heading">Newest Listings</h1>
+			
+			{page_body}
+
+
+
+		</div>
+		<div class="table-list">
+			<table class="items">
+				<tr>
+					<th colspan="2">Item Name</th>
+					<th>SKU</th>
+					<th>Price</th>
+				</tr>
+				
+				{exp:stash:get name="newest"}
+				
+			</table>
+			<footer>
+				<div class="pagination">
+
+					{exp:stash:parse process="end"}
+							{exp:stash:pagination_links}
+					{/exp:stash:parse}
+
+			</div>
+			</footer>
+		</div>
+
+		</div>
+	{/exp:stash:set}
+
+{/exp:channel:entries}	
+
+
+
+			

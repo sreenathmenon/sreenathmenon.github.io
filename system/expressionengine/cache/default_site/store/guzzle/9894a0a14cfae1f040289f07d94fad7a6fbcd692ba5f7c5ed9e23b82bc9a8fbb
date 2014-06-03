@@ -1,0 +1,2 @@
+a:3:{s:4:"time";i:1396865495;s:3:"ttl";i:3600;s:4:"data";s:511:"<?xml version="1.0"?>
+<RatingServiceSelectionResponse><Response><TransactionReference><CustomerContext>Rating and Service</CustomerContext><XpciVersion>1.0</XpciVersion></TransactionReference><ResponseStatusCode>0</ResponseStatusCode><ResponseStatusDescription>Failure</ResponseStatusDescription><Error><ErrorSeverity>Hard</ErrorSeverity><ErrorCode>111285</ErrorCode><ErrorDescription>The postal code N1G4W4 is invalid for AK United States.</ErrorDescription></Error></Response></RatingServiceSelectionResponse>";}

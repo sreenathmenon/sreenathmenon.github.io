@@ -1,0 +1,46 @@
+{embed="site/.wrapper"}
+
+{snippet:sidebar_flyout}
+
+
+	{exp:stash:set name="robots"}
+		<meta name="robots" value="NOINDEX,NOFOLLOW">
+	{/exp:stash:set}
+
+	{!--{exp:stash:set_value name="seo_entry" value="{entry_id}"}--}
+	{exp:stash:set_value name="body_class" value="account-forgot"}
+
+	{exp:stash:set name="body"}
+	<div class="primary">
+		<div class="secondary-feature">
+			<h1 class="page-heading">Forgot Password</h1>
+			<div class="create-account">
+				{exp:freemember:forgot_password 
+					return="account/forgot-sent" 
+					error_handling="inline" 
+					error_delimiters='<span class="error">|</span>'
+					reset="account/reset"
+				}
+
+				
+				<p>Enter your email and click submit to have a password reset link sent to you.</p>
+				<div class="general-form account-form">
+					<div class="form-collection">
+
+						<p class="form-item">
+							<label for="company">Email:</label>
+							<input type="email" name="email" name="email">
+							{error:email}
+						</p>
+
+
+						<p class="form-item"><input type="submit" class="general-submit" value=""></p>
+					</div>
+				</div>
+				{/exp:freemember:forgot_password}
+			</div>
+			
+			
+		</div>
+	</div>
+	{/exp:stash:set}

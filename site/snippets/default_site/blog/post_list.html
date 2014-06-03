@@ -1,0 +1,47 @@
+{if no_results}
+	{redirect="404"}
+{/if}
+
+<article class="post list-view">
+	<div class="lead-image">
+		<a href="{url_title_path="blog/post"}">{exp:ce_img:single src="{blog_image}" alt="{title}" width="160" height="160"}</a>
+	</div>
+	<div class="post-meta">
+		<header>
+			<div class="post-meta">
+				<h1 class="article-title"><a href="{url_title_path="blog/post"}">{title}</a></h1>
+				<h2 class="article-subheading">BMI Surplus on {entry_date format="%F %j, %Y"}</h2>
+				<h2 class="categories article-subheading">{categories backspace="2"}<a href="{path="blog"}">{category_name}</a>, {/categories}</h2>
+				<h2 class="article-subheading"><a href="{url_title_path="blog/post"}#disqus_thread">Comments</a></h2>
+			</div>
+		</header>
+		<section>
+			<p>{exp:eehive_hacksaw words="20" append="..."}{blog_body}{/exp:eehive_hacksaw}</p>
+		</section>
+		<footer>
+			<a class="continue-reading" href="{url_title_path="blog/post"}">Continue Reading "{title}"</a>
+		</footer>
+	</div>
+</article>
+
+{paginate}
+	{exp:stash:set:nested name="pagination_links"}
+
+		{pagination_links}
+		      <ul>
+		              {previous_page}
+		                      <li class="prev"><a href="{pagination_url}">Previous</a></li>
+		              {/previous_page}
+
+		              {page}
+		                      <li class="page-{pagination_page_number} {if current_page}active{/if}"><a href="{pagination_url}">{pagination_page_number}</a></li>
+		              {/page}
+
+		              {next_page}
+		                      <li class="next"><a href="{pagination_url}">Next</a></li>
+		              {/next_page}
+		      </ul>
+		{/pagination_links}
+
+	{/exp:stash:set:nested}
+{/paginate}
